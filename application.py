@@ -469,7 +469,7 @@ def healthy_conclusion():
     cbNo.set(0)
     cbYes_healthy.forget()
     cbNo_healthy.forget()
-    label2.config(pady = 50, text = "Remember, when you are close to someone,\nwhat you do or say around that person makes an impact, whether positive or negative.\n\nYour healthy communication score this week with %s is %i.\n\n Effective, health communication is possible for you,\nand developing these skills can help you develop and build trust and safety with %s." % (person, final_score, person))
+    label2.config(pady = 50, text = "Remember, when you are close to someone,\nwhat you do or say around that person makes an impact, whether positive or negative.\n\nYour healthy communication score this week with %s is %i.\n\n Effective, healthy communication is possible for you,\nand developing these skills can help you develop and build trust and safety with %s." % (person, final_score, person))
     bNot_addressed.pack(pady = 50)
 
 def healthy4():
