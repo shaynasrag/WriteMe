@@ -764,7 +764,7 @@ score_list = ["Communal Strength", "Anxiety", "Communication Score"]
 score_dict = {"Communal Strength": 1, "Anxiety": 2, "Communication Score": 12}
 score_index_dict = {1: "Communal Strength", 2: "Anxiety", 12: "Communication Score"}
 
-graph_list = ["Bar Graph", "Line Graph", "Scatter Plot"]
+graph_list = ["Bar Graph", "Line Graph"]
 
 
 text_menu = OptionMenu(parent, variable, *text_list, command=menu_option)
