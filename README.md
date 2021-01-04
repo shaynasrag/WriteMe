@@ -31,4 +31,4 @@ Statistics are split into 3 categories: graphical representations of numerical d
 
 ## Youtube Walkthrough
 
-Coming Soon
+[![Tkinter GUI Walkthrough](https://i9.ytimg.com/vi/_JiD7lCNH6I/mq3.jpg?sqp=CPT3zf8F&rs=AOn4CLDUyV28lsbSDzuV-QLigBMTcxQWiA)](https://www.youtube.com/watch?v=_JiD7lCNH6I)
