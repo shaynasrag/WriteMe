@@ -5,8 +5,8 @@ class Journal():
         self._submission_ls = []
         self._people = []
     
-    def add_submission(self):
-        submission = Submission()
+    def add_submission(self, submission):
+        self._submission_ls.append(submission)
         
     
 
