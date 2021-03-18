@@ -10,21 +10,31 @@ class Journal(Base):
     _submissions = relationship("Submission")
     _id = Column(Integer, primary_key = True)
     _people = relationship("People")
-
+    _name = Column(String)
+ 
     # def __init__(self):
     #     self._people = []
     
     def add_submission(self, submission):
         self._submissions.append(submission)
     
+    def get_people(self):
+        return self._people
+    
+    def add_person(self, person):
+        p = People(person)
+        self._people.append(p)
             
     
-class People(Base):
+class People(Journal):
     __tablename__ = "people"
     _journal_id = Column(Integer, ForeignKey("journal._id"))
-    _id = Column(Integer, primary_key = True)
+    _people_id = Column(Integer, primary_key = True)
     _person = Column(String)
 
-    def add_person(self, person, session):
-        if person not in session.query(self).all():
-            self._person = person
+    def __init__(self, person):
+        self._person = person
+
+    # def add_person(self, person, session):
+    #     if person not in session.query(self).all():
+    #         self._person = person

@@ -16,7 +16,7 @@ class Submission(Base):
     def __init__(self):
         self._date = datetime.now().strftime("%m-%d-%Y %H:%M:%S")
 
-    def add_entry(self, entry, person):
+    def add_entry(self, entry):
         self._entries.append(entry)
                 
 
