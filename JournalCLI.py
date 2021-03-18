@@ -1,9 +1,23 @@
+import sys
 from Journal import Journal
 from Exceptions import IncorrectResponse
+from Entry import Base, Entry
+from Submission import Submission
+
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, MetaData, create_engine
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm.session import sessionmaker
+
+from sqlalchemy.types import TypeDecorator
 
 class JournalCLI():
     def __init__(self):
-        self._journal = Journal()
+        self._session = Session()
+        self._journal = self._session.query(Journal).first()
+        if not self._journal:
+            self._journal = Journal()
+            self._session.add(self._journal)
+            self._session.commit()
         self._name = None
         self._choices = {
             "add submission": self._create_submission,
@@ -12,9 +26,10 @@ class JournalCLI():
         }
 
     def _display_menu(self):
-        if self._name = None:
+        if not self._name:
             print("Hi! What's your name?")
             self._name = input()
+            print("Hi {0}, would you like to do today?".format(self._name))
         else:
             print("Hi {0}, what would you like to do today?".format(self._name))
         options = ", ".join(self._choices.keys())
@@ -32,19 +47,24 @@ class JournalCLI():
             
     def _create_submission(self):
         new_submission = Submission()
+        self._session.add(new_submission)
+        self._journal.add_submission(new_submission)
+        self._session.add(self._journal)
         self._check_temperature()
         person = self._show_people()
         discuss = True
         while discuss:
             new_entry = self._create_entry(person)
+            self._session.add(new_entry)
             new_submission.add_entry(person, new_entry)
+            self._session.add(new_submission)
+            self._session.commit()
             cont = input("Would you like to discuss another relationship? Yes or No. \n")
             if (cont.lower() == "no"):
                 discuss = False
                 print("It's important to remember that having anxious tendencies doesn't make you a bad person or unworthy of love.\nYou can have a secure relationship regardless of your inidividual insecurity score.\nRelationship security is earned through actions and behaviors that build both partners up and bring out the best in them.\nHaving a high insecurity score just means that you might encounter more challenges.\n")
                 next = print("Thank you so much for working to understand yourself better and to work toward healthier and fulfilling relationships with the people in your life. See you next time! Type anything to complete this submission")
-        self._journal.add_submission(new_submission)
-
+        
 
 
     def _check_stats(self):
@@ -62,7 +82,7 @@ class JournalCLI():
         elif response.lower() == "not great":
             print("I'm sorry to hear you're not feeling so great. Maybe our work together will help us today. Let's get started.")
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["Great", "Not Great"])
     
     def _show_people(self):
         for i in self._journal._people:
@@ -70,16 +90,19 @@ class JournalCLI():
 
         print("New Person\n")
         choice = input("Please select who you would like to journal about today: ")
-        if choice in self._journal._people:
-            return person
+        if choice in self._session.query(self).all(): 
+            return choice
         elif choice == "New Person":
             person = input("Please enter the name of the new person you would like to add to your journal")
+            self._journal.add_person(person, self._session)
+            self._session.commit()
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["New Person"].extend(self._journal._people))
     
     def _create_entry(self, person):
         new_entry = Entry()
         new_entry.add_person(person)
+        self._session.add(person)
         communal_strength = input("Great Choice! How close are you feeling to {0} today?\nClose, Not So Close, Distanced".format(person))
         new_entry.add_communal_strength(communal_strength)
         if communal_strength == "Close":
@@ -89,7 +112,7 @@ class JournalCLI():
         new_entry.add_anxiety(anxiety)
 
         talk_conflict = input("Would you like to talk about a conflict you've experienced recently with {0}?".format(person))
-        if entry._talk_about_conflict(talk_conflict):
+        if new_entry._talk_about_conflict(talk_conflict):
             conflict_description = input("Conflicts can come in all shapes and sizes.\nPlease describe the conflict you've been experiencing and how it's been making you feel.\n")
             new_entry.add_conflict(conflict_description)
             space = input("Wow, that sounds like it's been really hard for you.\nI definitely understand why you've been feeling some anxiety in the relationship, and I think it's important that we first take a moment to accept that feeling.\nLet me know when you've taken a moment to give yourself space for this.\n")
@@ -106,7 +129,7 @@ class JournalCLI():
                 self_soothe2 = input("Let's talk emotionally. Did you take steps to soothe yourself, emotionally? Yes or No\n")
                 new_entry.add_self_soothe2(self_soothe2)
                 other_soothe2 = input("And finally, how about {0}. Did they take steps to soothe you, relationally? (1 for yes, 0 for no)\n".format(person))
-                new_entry.add_other_soothe2(self_soothe2)
+                new_entry.add_other_soothe2(other_soothe2)
                 print("Remember, when you are close to someone, what you do or say around that person makes an impact, whether positive or negative.\nYour healthy communication score this time with {0} is {1}".format(person, new_entry._communication_score))
                 print("Effective, health communication is possible for you, and developing these skills can help you develop and build trust and safety with {0}.".format(person))
             else:
@@ -127,7 +150,14 @@ class JournalCLI():
         
         return new_entry
 
+if __name__ == "__main__":
+    engine = create_engine(f"sqlite:///journal.db")
+    Base.metadata.create_all(engine)
 
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+
+    JournalCLI().run()
 
 
         

@@ -1,15 +1,24 @@
 from datetime import datetime
-from Entry import Entry
+from Entry import Entry, Base
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, MetaData, create_engine
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm.session import sessionmaker
+from MyTime import MyTime
+from sqlalchemy.types import TypeDecorator
 
-class Submission():
+class Submission(Base):
+    __tablename__ = "submission"
+    _entries = relationship("Entry")
+    _date = Column(MyTime(length = 20))
+    _journal_id = Column(Integer, ForeignKey("journal._id"))
+    _submission_number = Column(Integer, primary_key = True)
+
     def __init__(self):
         self._date = datetime.now().strftime("%m-%d-%Y %H:%M:%S")
-        self._entry_list = []
-        self._person_list = []
 
     def add_entry(self, entry, person):
-        self._entry_list.append(entry)
-        self._person_list.append(person)        
+        self._entries.append(entry)
+                
 
         
         

@@ -1,5 +1,32 @@
 from Exceptions import IncorrectResponse
-class Entry():
+
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, MetaData, Float, Boolean
+from MyTime import MyTime
+
+Base = declarative_base()
+
+class Entry(Base):
+    __tablename__ = "entry"
+    _submission_id = Column(Integer, ForeignKey('submission._submission_number'))
+    _entry_id = Column(Integer, primary_key= True)
+    _person = Column(String)
+    _gratitude = Column(String)
+    _conflict = Column(String)
+    _steps_to_secure = Column(String)
+    _how_addressed = Column(String)
+    _appreciate_other = Column(String)
+    _appreciate_self = Column(String)
+    _support_from_others = Column(String)
+    _consent = Column(Integer)
+    _self_soothe1 = Column(Integer)
+    _other_soothe1 = Column(Integer)
+    _self_soothe2 = Column(Integer)
+    _other_soothe2 = Column(Integer)
+    _communication_score = Column(Integer)
+    _communal_strength = Column(Integer)
+    _anxiety = Column(Integer)
+
     def __init__(self):
         self._person = None
         self._gratitude = None
@@ -43,13 +70,13 @@ class Entry():
         self._support_from_others = support 
     
     def add_consent(self, consent):
-        if consent == "yes":
+        if consent.lower() == "yes":
             self._consent = 1
             self._communication_score += 1
-        elif consent == "no":
+        elif consent.lower() == "no":
             self._consent = 0
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["Yes", "No"])
         
     def add_self_soothe1(self, self_soothe1):
         if self_soothe1 == "yes":
@@ -58,7 +85,7 @@ class Entry():
         elif self_soothe1 == "no":
             self._self_soothe1 = 0
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["Yes", "No"])
     
     def add_other_soothe1(self, other_soothe1):
         if other_soothe1 == "yes":
@@ -67,7 +94,7 @@ class Entry():
         elif other_soothe1 == "no":
             self._other_soothe1 = 0
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["Yes", "No"])
     
     def add_self_soothe2(self, self_soothe2):
         if self_soothe2 == "yes":
@@ -76,7 +103,7 @@ class Entry():
         elif self_soothe2 == "no":
             self._self_soothe2 = 0
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["Yes", "No"])
 
     def add_other_soothe2(self, other_soothe2):
         if other_soothe2 == "yes":
@@ -85,7 +112,7 @@ class Entry():
         elif other_soothe2 == "no":
             self._other_soothe2 = 0
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["Yes", "No"])
 
     def add_communal_strength(self, communal_strength):
         if communal_strength == "Close":
@@ -95,7 +122,7 @@ class Entry():
         elif communal_strength == "Distanced":
             self._communal_strength = 1
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["Close", "Not So Close", "Distanced"])
     
     def add_anxiety(self, anxiety):
         if anxiety == "High Anxiety":
@@ -107,7 +134,7 @@ class Entry():
         elif anxiety == "No Anxiety":
             self._anxiety = 0
         else:
-            raise IncorrectResponse()
+            raise IncorrectResponse(["High Anxiety", "Mid Anxiety", "Low Anxiety", "No Anxiety"])
 
     def _talk_about_conflict(self, answer):
         if answer.lower() == "yes" or answer.lower() == "y":
@@ -115,13 +142,13 @@ class Entry():
         elif answer.lower() == "no" or answer.lower() == "n":
             return False
         else:
-            raise IncorrectResponse
+            raise IncorrectResponse(["Yes", "No"])
 
     def _addressed_conflict(self, answer):
-    if answer.lower() == "yes" or answer.lower() == "y":
-        return True
-    elif answer.lower() == "no" or answer.lower() == "n":
-        return False
-    else:
-        raise IncorrectResponse
+        if answer.lower() == "yes" or answer.lower() == "y":
+            return True
+        elif answer.lower() == "no" or answer.lower() == "n":
+            return False
+        else:
+            raise IncorrectResponse(["Yes", "No"])
 
