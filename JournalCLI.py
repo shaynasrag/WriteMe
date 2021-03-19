@@ -21,7 +21,12 @@ class JournalCLI():
         self._choices = {
             "add submission": self._create_submission,
             "check stats": self._check_stats,
+            "fetch transcript": self._fetch_transcript,
             "quit": self._quit,
+        }
+        self._types_of_submissions = {
+            "interpersonal conflict": self._conflict_entry,
+            "emotional trigger": self._trigger_entry,            
         }
         self._curr_person = None
 
@@ -48,11 +53,28 @@ class JournalCLI():
                 print("{0} is not a valid choice".format(choice))
             
     def _create_submission(self):
-        self._check_temperature()
         new_submission = Submission()
         self._journal.add_submission(new_submission)
         self._session.add(new_submission)
         self._session.commit()
+        
+        while True:
+            print("What best describes what you would like to talk about right now?\nI am experiencing an...")
+            options = "\n".join(self._types_of_submissions.keys())
+            print(options)
+            print("return to main menu")
+            choice = input(">")
+            if choice == "return to main menu":
+                return
+            action = self._types_of_submissions.get(choice)
+            if action:
+                action(new_submission)
+            else:
+                print("{0} is not a valid choice".format(choice))
+
+
+    
+    def _conflict_entry(self, new_submission):
         discuss = True
         while discuss:    
             self._choose_person()
@@ -63,34 +85,30 @@ class JournalCLI():
             cont = input("Would you like to discuss another relationship? Yes or No. \n")
             if (cont.lower() == "no"):
                 discuss = False
-                print("It's important to remember that having anxious tendencies doesn't make you a bad person or unworthy of love.\nYou can have a secure relationship regardless of your inidividual insecurity score.\nRelationship security is earned through actions and behaviors that build both partners up and bring out the best in them.\nHaving a high insecurity score just means that you might encounter more challenges.\n")
-                next = input("Thank you so much for working to understand yourself better and to work toward healthier and fulfilling relationships with the people in your life. See you next time! Type anything to complete this submission")
-
+                print("It's important to remember that having anxious tendencies doesn't make you a bad person or unworthy of love.\nSecure relationships are possible for you.")
+                print("Relationship security is earned through actions and behaviors that build both partners up and bring out the best in them.")
+                print("You may just have more challenges in this space to overcome than others.\n")
+                next = input("Thank you so much for working to understand yourself better and to work toward healthier and fulfilling relationships with the people in your life. See you next time! Type anything to return to the submission menu.\n>")
     
-        
+    def _trigger_entry(self, new_submission):
+        pass
     def _check_stats(self):
+        pass
+
+    def _fetch_transcript(self):
         pass
     
     def _quit(self):
         sys.exit(0)
-    
-    def _check_temperature(self):
 
-        response = input("Hi {0}, how are you today? Great or Not Great\n>".format(self._journal._name))
-
-        if response.lower() == "great":
-            print("I'm glad to hear it! Let's get started.")
-        elif response.lower() == "not great":
-            print("I'm sorry to hear you're not feeling so great. Maybe our work together will help us today. Let's get started.")
-        else:
-            raise IncorrectResponse(["Great", "Not Great"])
-    
     def _choose_person(self):
         print("Please select who you would like to journal about today (If you would like to add a new person, type 'New Person'):")
+        name_ls = []
         for i in self._journal.get_people():
             print(i._person)
+            name_ls.append(i._person)
         choice = input(">")
-        if choice in self._journal.get_people(): 
+        if choice in name_ls: 
             self._curr_person = choice
         elif choice == "New Person":
             person = input("Please enter the name of the new person you would like to add to your journal:\n>")
@@ -126,19 +144,15 @@ class JournalCLI():
                 new_entry.add_addressed(how_addressed)
                 consent = input("I'm glad you took steps to resolve this conflict. Let's talk about your process in terms of healthy communication.\nDid you ask for consent from {0} before approaching the conflict?\nOptions: Yes or No\n>".format(self._curr_person))
                 new_entry.add_consent(consent)
-                self_soothe1 = input("Next, did you take steps to physically soothe yourself?\nOptions: Yes or No\n>")
+                self_soothe1 = input("Next, did you take steps to physically/emotionally soothe yourself?\nOptions: Yes or No\n>")
                 new_entry.add_self_soothe1(self_soothe1)
-                other_soothe1 = input("How about {0}. Did they take steps to physically soothe you?\nOptions: Yes or No\n>".format(self._curr_person))
+                other_soothe1 = input("How about {0}. Did you take steps to physically/emotionally soothe each other?\nOptions: Yes or No\n>".format(self._curr_person))
                 new_entry.add_other_soothe1(other_soothe1)
-                self_soothe2 = input("Let's talk emotionally. Did you take steps to soothe yourself, emotionally?\nOptions: Yes or No\n>")
-                new_entry.add_self_soothe2(self_soothe2)
-                other_soothe2 = input("And finally, how about {0}. Did they take steps to soothe you, relationally?\nOptions: Yes or No\n>".format(self._curr_person))
-                new_entry.add_other_soothe2(other_soothe2)
-                done = input("Remember, when you are close to someone, what you do or say around that person makes an impact, whether positive or negative.\nYour healthy communication score this time with {0} is {1}. Type anything to continue\n>".format(self._curr_person, new_entry._communication_score))
+                done = input("Remember, when you are close to someone, what you do or say around that person makes an impact, whether positive or negative.\nYour healthy communication score this time with {0} is {1}/3. Type anything to continue\n>".format(self._curr_person, new_entry._communication_score))
                 done = input("Effective, health communication is possible for you, and developing these skills can help you develop and build trust and safety with {0}. Type anything to continue\n>".format(self._curr_person))
             else:
                 next_steps = input("That's okay, you'll get there. What steps can you take to feel more secure with {0}?\n>".format(self._curr_person))
-                new_entry._steps_to_secure(next_steps)
+                new_entry.add_steps_to_secure(next_steps)
 
             done = input("Let's remember that if you've acted unpleasantly, you're not doing it on purpose. You're just expressing yourself in a way that's familiar to you and trying to get your needs met.\nType anything to continue.\n>")
             print("Self compassion may be unfamiliar because you've learned to condemn, criticize, or judge yourself when you learn something you don't like about yourself.\nLet's zoom in on how you reacted to the conflict between you and {0}.".format(self._curr_person))
