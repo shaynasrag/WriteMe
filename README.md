@@ -7,7 +7,7 @@ This program was inspired by my sophomore fall university course, Attraction and
 
 This program is designed specifically for those who identify along the anxious attachment; however, since attachment theory exists on a spectrum, likely everyone would benefit from the introspection prompted by this program.
 
-Further optimization of the backend structure of this code comes from my sophomore spring university course, Object Oriented Programming, taught by Dr. Timothy Barron. Optimizations include object oriented design structure built with CLI and Tkinter GUI frontend options, the use of sqlalchemy databases, default AND custom exception handling, and logging.
+Further (implemented and intended) optimization of the backend structure of this code comes from my sophomore spring university course, Object Oriented Programming, taught by Dr. Timothy Barron. Optimizations include object oriented design structure built with CLI and Tkinter GUI frontend options, the use of sqlalchemy databases, default AND custom exception handling, and logging.
 ### Form
 This program takes the form of Python's tkinter graphical user interface (GUI). It must be run on a local computer and requires the following dependencies on top of Python 3.8:
 ``tkinter``
