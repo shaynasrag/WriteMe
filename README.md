@@ -7,18 +7,24 @@ This program was inspired by my sophomore fall university course, Attraction and
 
 This program is designed specifically for those who identify along the anxious attachment; however, since attachment theory exists on a spectrum, likely everyone would benefit from the introspection prompted by this program.
 
+Further optimization of the backend structure of this code comes from my sophomore spring university course, Object Oriented Programming, taught by Dr. Timothy Barron. Optimizations include object oriented design structure built with CLI and Tkinter GUI frontend options, the use of sqlalchemy databases, default AND custom exception handling, and logging.
 ### Form
-This program takes the form of Python's tkinter graphical user interface (GUI). It must be run on a local computer and requires packages that can be downloaded via ``pip`` and can be found in the ``import`` section of ``application.py``. Because of the static nature of the tkinter GUI, this version is now deprecated and I am currently working on a web-compatible, user-friendly version of this program.
+This program takes the form of Python's tkinter graphical user interface (GUI). It must be run on a local computer and requires the following dependencies on top of Python 3.8:
+``tkinter``
 
+``sqlalchemy``
+
+My focus in developing this program is primarily on the backend design and efficiency. I default to CLI and GUI frontend options as a way to represent the data used.
+ 
 ## How to Use
 
 ### Purpose
 
 This program is a mix of a therapeutic experience as well as an analytical, longitudinal collection of data. Some aspects of this program collect numerical representations of data, other parts prompt free-response submissions, and the remainder focus on mindfulness, introspection, and self-compassion. This is BOTH a self-help and an analytical tool.
 
-### Local Files
+### Data Storage
 
-All data is written to CSV files that are stored locally in the current directory.
+All data is stored locally in a sqlalchemy database.
 
 ### Submissions vs Statistics
 
@@ -31,5 +37,5 @@ Statistics are split into 3 categories: graphical representations of numerical d
 
 ## Youtube Walkthrough
 
-Click the image below to view my walkthrough of the Tkinter GUI in this repo. In the video, I discuss ways in which I am hoping to optimize the performance in the web app version.
+Click the image below to view my walkthrough of the Tkinter GUI (deprecated version from January) in this repo. In the video, I discuss ways in which I am hoping to optimize the performance in the web app version.
 [![Tkinter GUI Walkthrough](https://i9.ytimg.com/vi/_JiD7lCNH6I/mq3.jpg?sqp=CPT3zf8F&rs=AOn4CLDUyV28lsbSDzuV-QLigBMTcxQWiA)](https://www.youtube.com/watch?v=_JiD7lCNH6I)
