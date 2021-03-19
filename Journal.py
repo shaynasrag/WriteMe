@@ -22,11 +22,9 @@ class Journal(Base):
         return self._people
     
     def add_person(self, person):
-        p = People(person)
-        self._people.append(p)
-            
+        self._people.append(person)    
     
-class People(Journal):
+class People(Base):
     __tablename__ = "people"
     _journal_id = Column(Integer, ForeignKey("journal._id"))
     _people_id = Column(Integer, primary_key = True)

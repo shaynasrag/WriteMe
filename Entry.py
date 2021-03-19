@@ -79,59 +79,59 @@ class Entry(Base):
             raise IncorrectResponse(["Yes", "No"])
         
     def add_self_soothe1(self, self_soothe1):
-        if self_soothe1 == "yes":
+        if self_soothe1.lower() == "yes":
             self._self_soothe1 = 1
             self._communication_score += 1
-        elif self_soothe1 == "no":
+        elif self_soothe1.lower() == "no":
             self._self_soothe1 = 0
         else:
             raise IncorrectResponse(["Yes", "No"])
     
     def add_other_soothe1(self, other_soothe1):
-        if other_soothe1 == "yes":
+        if other_soothe1.lower() == "yes":
             self._other_soothe1 = 1
             self._communication_score += 1
-        elif other_soothe1 == "no":
+        elif other_soothe1.lower() == "no":
             self._other_soothe1 = 0
         else:
             raise IncorrectResponse(["Yes", "No"])
     
     def add_self_soothe2(self, self_soothe2):
-        if self_soothe2 == "yes":
+        if self_soothe2.lower() == "yes":
             self._self_soothe2 = 1
             self._communication_score += 1
-        elif self_soothe2 == "no":
+        elif self_soothe2.lower() == "no":
             self._self_soothe2 = 0
         else:
             raise IncorrectResponse(["Yes", "No"])
 
     def add_other_soothe2(self, other_soothe2):
-        if other_soothe2 == "yes":
+        if other_soothe2.lower() == "yes":
             self._other_soothe2 = 1
             self._communication_score += 1
-        elif other_soothe2 == "no":
+        elif other_soothe2.lower() == "no":
             self._other_soothe2 = 0
         else:
             raise IncorrectResponse(["Yes", "No"])
 
     def add_communal_strength(self, communal_strength):
-        if communal_strength == "Close":
+        if communal_strength.lower() == "close":
             self._communal_strength = 3
-        elif communal_strength == "Not So Close":
+        elif communal_strength.lower() == "not so close":
             self._communal_strength = 2
-        elif communal_strength == "Distanced":
+        elif communal_strength.lower() == "distanced":
             self._communal_strength = 1
         else:
             raise IncorrectResponse(["Close", "Not So Close", "Distanced"])
     
     def add_anxiety(self, anxiety):
-        if anxiety == "High Anxiety":
+        if anxiety.lower() == "high anxiety":
             self._anxiety = 3
-        elif anxiety == "Mid Anxiety":
+        elif anxiety.lower() == "mid anxiety":
             self._anxiety = 2
-        elif anxiety == "Low Anxiety":
+        elif anxiety.lower() == "low anxiety":
             self._anxiety = 1
-        elif anxiety == "No Anxiety":
+        elif anxiety.lower() == "no anxiety":
             self._anxiety = 0
         else:
             raise IncorrectResponse(["High Anxiety", "Mid Anxiety", "Low Anxiety", "No Anxiety"])
