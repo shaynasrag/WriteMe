@@ -52,12 +52,7 @@ class JournalCLI():
             else:
                 print("{0} is not a valid choice".format(choice))
             
-    def _create_submission(self):
-        new_submission = Submission()
-        self._journal.add_submission(new_submission)
-        self._session.add(new_submission)
-        self._session.commit()
-        
+    def _create_submission(self):        
         while True:
             print("What best describes what you would like to talk about right now?\nI am experiencing an...")
             options = "\n".join(self._types_of_submissions.keys())
@@ -68,6 +63,10 @@ class JournalCLI():
                 return
             action = self._types_of_submissions.get(choice)
             if action:
+                new_submission = Submission()
+                self._journal.add_submission(new_submission)
+                self._session.add(new_submission)
+                self._session.commit()
                 action(new_submission)
             else:
                 print("{0} is not a valid choice".format(choice))
