@@ -136,19 +136,10 @@ class Entry(Base):
         else:
             raise IncorrectResponse(["High Anxiety", "Mid Anxiety", "Low Anxiety", "No Anxiety"])
 
-    def _talk_about_conflict(self, answer):
+    def yes_or_no(self, answer):
         if answer.lower() == "yes" or answer.lower() == "y":
             return True
         elif answer.lower() == "no" or answer.lower() == "n":
             return False
         else:
             raise IncorrectResponse(["Yes", "No"])
-
-    def _addressed_conflict(self, answer):
-        if answer.lower() == "yes" or answer.lower() == "y":
-            return True
-        elif answer.lower() == "no" or answer.lower() == "n":
-            return False
-        else:
-            raise IncorrectResponse(["Yes", "No"])
-

@@ -76,14 +76,30 @@ class JournalCLI():
     
     def _conflict_entry(self, new_submission):
         discuss = True
-        while discuss:    
-            self._choose_person()
+        while discuss:   
+            while True:
+                try: 
+                    self._choose_person()
+                    break
+                except IncorrectResponse as e:   
+                    print("Please choose from the following choices: ") 
+                    for choice in e._choices:
+                        print(choice)
+        
             new_entry = self._create_entry()
             self._session.add(new_entry)
             self._session.commit()
             new_submission.add_entry(new_entry)
-            cont = input("Would you like to discuss another relationship? Yes or No. \n")
-            if (cont.lower() == "no"):
+            while True:
+                try:
+                    cont = input("Would you like to discuss another relationship? Yes or No. \n")
+                    another_relationship = new_entry.yes_or_no(cont)
+                    break
+                except IncorrectResponse as e:
+                    print("Please choose from the following choices: ") 
+                    for choice in e._choices:
+                        print(choice)
+            if not another_relationship:
                 discuss = False
                 print("It's important to remember that having anxious tendencies doesn't make you a bad person or unworthy of love.\nSecure relationships are possible for you.")
                 print("Relationship security is earned through actions and behaviors that build both partners up and bring out the best in them.")
@@ -107,11 +123,24 @@ class JournalCLI():
         for i in self._journal.get_people():
             print(i._person)
             name_ls.append(i._person)
+
         choice = input(">")
         if choice in name_ls: 
             self._curr_person = choice
         elif choice == "New Person":
             person = input("Please enter the name of the new person you would like to add to your journal:\n>")
+            if person in name_ls:
+                print("You have written about {0} before. Would you like your submission to be about {0} or would you like to start again?".format(person))
+                while True:                        
+                    new_choice = input("Options: {0}, Start Again\n>".format(person))
+                    if new_choice == person or new_choice.lower() == "start again":
+                        break
+                    else:
+                        print("Please type either {0} or 'Start Again'".format(person))
+                if new_choice == "Start Again":
+                    self._choose_person()
+                else:
+                    self._curr_person = new_choice     
             p = People(person)
             self._journal.add_person(p)
             self._session.add(p)
@@ -125,29 +154,81 @@ class JournalCLI():
         new_entry = Entry()
         new_entry.add_person(self._curr_person)
         self._session.add(new_entry)
-        communal_strength = input("Great Choice! How close are you feeling to {0} today?\nOptions: Close, Not So Close, Distanced\n>".format(self._curr_person))
-        new_entry.add_communal_strength(communal_strength)
-        if communal_strength == "Close":
-            anxiety = input("I'm glad to hear things are going well with {0}! To what extent have you been feeling anxiety in the relationship?\nOptions: High Anxiety, Mid Anxiety, Low Anxiety, No Anxiety\n>".format(self._curr_person))
+        print("Great Choice!")
+        while True:
+            try:
+                communal_strength = input("How close are you feeling to {0} today?\nOptions: Close, Not So Close, Distanced\n>".format(self._curr_person))
+                new_entry.add_communal_strength(communal_strength)
+                break
+            except IncorrectResponse as e:
+                print("Please choose from the following choices: ") 
+                for choice in e._choices:
+                    print(choice)
+        if communal_strength.lower() == "Close":
+            print("I'm glad to hear things are going well with {0}!".format(self._curr_person))
         else:
-            anxiety = input("I'm sorry to hear that you're feeling this way. To what extent have you been feeling anxiety in the relationship?\nOptions: High Anxiety, Mid Anxiety, Low Anxiety, No Anxiety\n>")
-        new_entry.add_anxiety(anxiety)
-
-        talk_conflict = input("Would you like to talk about a conflict you've experienced recently with {0}?\nOptions: Yes or No\n>".format(self._curr_person))
-        if new_entry._talk_about_conflict(talk_conflict):
+            print("I'm sorry to hear that you're feeling this way.")
+        while True:
+            try:
+                anxiety = input("To what extent have you been feeling anxiety in the relationship?\nOptions: High Anxiety, Mid Anxiety, Low Anxiety, No Anxiety\n>")
+                new_entry.add_anxiety(anxiety)
+                break
+            except IncorrectResponse as e:
+                print("Please choose from the following choices: ") 
+                for choice in e._choices:
+                    print(choice)
+        while True:
+            try:
+                talk_conflict = input("Would you like to talk about a conflict you've experienced recently with {0}?\nOptions: Yes or No\n>".format(self._curr_person))
+                talk_conflict = new_entry.yes_or_no(talk_conflict)
+                break
+            except IncorrectResponse as e:
+                print("Please choose from the following choices: ") 
+                for choice in e._choices:
+                    print(choice)
+        if talk_conflict:
             conflict_description = input("Conflicts can come in all shapes and sizes.\nPlease describe the conflict you've been experiencing and how it's been making you feel.\n>")
             new_entry.add_conflict(conflict_description)
             space = input("Wow, that sounds like it's been really hard for you.\nI definitely understand why you've been feeling some anxiety in the relationship, and I think it's important that we first take a moment to accept that feeling.\nLet me know when you've taken a moment to give yourself space for this.\n>")
-            addressed = input("Thank you for allowing yourself some space for self-compassion. Have you addressed this conflict with {0}?\nOptions: Yes or No\n>".format(self._curr_person))
-            if new_entry._addressed_conflict(addressed):
+            while True:
+                try:
+                    addressed = input("Thank you for allowing yourself some space for self-compassion. Have you addressed this conflict with {0}?\nOptions: Yes or No\n>".format(self._curr_person))
+                    been_addressed = new_entry.yes_or_no(addressed)
+                    break
+                except IncorrectResponse as e:
+                    print("Please choose from the following choices: ") 
+                    for choice in e._choices:
+                        print(choice)
+            if been_addressed:
                 how_addressed = input("I'm glad to hear it! In your own words, how has the conflict been addressed?\n>")
                 new_entry.add_addressed(how_addressed)
-                consent = input("I'm glad you took steps to resolve this conflict. Let's talk about your process in terms of healthy communication.\nDid you ask for consent from {0} before approaching the conflict?\nOptions: Yes or No\n>".format(self._curr_person))
-                new_entry.add_consent(consent)
-                self_soothe1 = input("Next, did you take steps to physically/emotionally soothe yourself?\nOptions: Yes or No\n>")
-                new_entry.add_self_soothe1(self_soothe1)
-                other_soothe1 = input("How about {0}. Did you take steps to physically/emotionally soothe each other?\nOptions: Yes or No\n>".format(self._curr_person))
-                new_entry.add_other_soothe1(other_soothe1)
+                while True:
+                    try:
+                        consent = input("I'm glad you took steps to resolve this conflict. Let's talk about your process in terms of healthy communication.\nDid you ask for consent from {0} before approaching the conflict?\nOptions: Yes or No\n>".format(self._curr_person))
+                        new_entry.add_consent(consent)
+                        break
+                    except IncorrectResponse as e:
+                        print("Please choose from the following choices: ") 
+                        for choice in e._choices:
+                            print(choice)
+                while True:
+                    try:
+                        self_soothe1 = input("Next, did you take steps to physically/emotionally soothe yourself?\nOptions: Yes or No\n>")
+                        new_entry.add_self_soothe1(self_soothe1)
+                        break
+                    except IncorrectResponse as e:
+                        print("Please choose from the following choices: ") 
+                        for choice in e._choices:
+                            print(choice)
+                while True:
+                    try:
+                        other_soothe1 = input("How about {0}. Did you take steps to physically/emotionally soothe each other?\nOptions: Yes or No\n>".format(self._curr_person))
+                        new_entry.add_other_soothe1(other_soothe1)
+                        break
+                    except IncorrectResponse as e:
+                        print("Please choose from the following choices: ") 
+                        for choice in e._choices:
+                            print(choice)
                 done = input("Remember, when you are close to someone, what you do or say around that person makes an impact, whether positive or negative.\nYour healthy communication score this time with {0} is {1}/3. Type anything to continue\n>".format(self._curr_person, new_entry._communication_score))
                 done = input("Effective, health communication is possible for you, and developing these skills can help you develop and build trust and safety with {0}. Type anything to continue\n>".format(self._curr_person))
             else:
