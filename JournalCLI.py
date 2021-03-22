@@ -71,8 +71,6 @@ class JournalCLI():
             else:
                 print("{0} is not a valid choice".format(choice))
 
-
-    
     def _conflict_entry(self, new_submission):
         discuss = True
         while discuss:   
@@ -104,17 +102,6 @@ class JournalCLI():
                 print("Relationship security is earned through actions and behaviors that build both partners up and bring out the best in them.")
                 print("You may just have more challenges in this space to overcome than others.\n")
                 next = input("Thank you so much for working to understand yourself better and to work toward healthier and fulfilling relationships with the people in your life. See you next time! Type anything to return to the submission menu.\n>")
-    
-    def _trigger_entry(self, new_submission):
-        pass
-    def _check_stats(self):
-        pass
-
-    def _fetch_transcript(self):
-        pass
-    
-    def _quit(self):
-        sys.exit(0)
 
     def _choose_person(self):
         print("Please select who you would like to journal about today (If you would like to add a new person, type 'New Person'):")
@@ -233,7 +220,8 @@ class JournalCLI():
             else:
                 next_steps = input("That's okay, you'll get there. What steps can you take to feel more secure with {0}?\n>".format(self._curr_person))
                 new_entry.add_steps_to_secure(next_steps)
-
+            support = input("Experiencing a strain in one relationship can sometimes feel destabilizing. It's important that you exercise self compassion in seeking support from others. Where do you feel like you can get support right now?\n>")
+            new_entry.add_support_from_others(support)
             done = input("Let's remember that if you've acted unpleasantly, you're not doing it on purpose. You're just expressing yourself in a way that's familiar to you and trying to get your needs met.\nType anything to continue.\n>")
             print("Self compassion may be unfamiliar because you've learned to condemn, criticize, or judge yourself when you learn something you don't like about yourself.\nLet's zoom in on how you reacted to the conflict between you and {0}.".format(self._curr_person))
             filler = input("Zoom in on yourself during your conflict and repeat one or more of the following phrases:\nI see how you suffer just as anyone else does.\nMay you be happy.\nMay you be free from pain.\nAnything else that the you in the scene needs to hear in order to know that this difficulty is seen and acknowledged.\nType anything to continue.\n>")
@@ -247,6 +235,60 @@ class JournalCLI():
             new_entry.add_gratitude(gratitude)
         
         return new_entry
+    
+    def _trigger_entry(self, new_submission):
+        pass
+    def _check_stats(self):
+        pass
+
+    def _fetch_transcript(self):
+        submissions = self._journal.get_submissions()
+        while True:
+            print("Please select which submission you would like to save as a file.")
+            count = 1
+            for s in submissions:
+                print(count, s._date)
+                count += 1
+            print("return to main menu")
+            sub_num = input(">")
+            if sub_num == "return to main menu":
+                return
+            submission = self._journal.get_submission(int(sub_num) - 1)
+            print(submission._date)
+            filename = "Submission-" + sub_num
+            entries = submission.get_entries()
+            with open(filename, "w") as f:
+                f.write("Submission #" + sub_num + ": " + str(submission._date) + "\n")
+                count = 1
+                for entry in entries:
+                    f.write("Entry: " + str(count) + "\n")
+                    f.write("Person: " + entry._person + "\n")
+                    f.write("Anxiety Level: " + str(entry._anxiety) + "/3" + "\n")
+                    f.write("Closeness: " + str(entry._communal_strength) + "/3" + "\n")
+                    if entry._conflict is not None:
+                        f.write("Description of Conflict: " + entry._conflict + "\n")
+                    if entry._how_addressed is not None:
+                        f.write("How conflict was addressed: " + entry._how_addressed + "\n")
+                        f.write("Consent score: " + str(entry._consent) + "/1" + "\n")
+                        f.write("Self soothe score: " + str(entry._self_soothe1) + "/1" + "\n")
+                        f.write("Other soothe score: " + str(entry._other_soothe1) + "/1" + "\n")
+                        f.write("Total communication score: " + str(entry._communication_score) + "/3" + "\n")
+                    if entry._steps_to_secure is not None:
+                        f.write("Steps to security: " + entry._steps_to_secure + "\n")
+                    if entry._appreciate_other is not None:
+                        f.write("Appreciation of " + entry._person + ":" + entry._appreciate_other + "\n")
+                    if entry._appreciate_self is not None:
+                        f.write("Appreciation of self: " + entry._appreciate_self + "\n")
+                    if entry._gratitude is not None:
+                        f.write("Gratitude: " + entry._gratitude + "\n")
+                    if entry._support_from_others is not None:
+                        f.write("Support from others: " + entry._support_from_others + "\n")    
+                    f.write("______________________________\n")
+                    count += 1
+                print("Submission has been written to file.")
+
+    def _quit(self):
+        sys.exit(0)
 
 if __name__ == "__main__":
     engine = create_engine(f"sqlite:///journal.db")

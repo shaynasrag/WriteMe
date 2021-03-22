@@ -143,3 +143,4 @@ class Entry(Base):
             return False
         else:
             raise IncorrectResponse(["Yes", "No"])
+

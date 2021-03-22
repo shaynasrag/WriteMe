@@ -18,6 +18,12 @@ class Journal(Base):
     def add_submission(self, submission):
         self._submissions.append(submission)
     
+    def get_submissions(self):
+        return self._submissions
+    
+    def get_submission(self, index):
+        return self._submissions[index]
+    
     def get_people(self):
         return self._people
     
