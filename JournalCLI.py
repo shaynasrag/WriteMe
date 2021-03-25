@@ -1,7 +1,7 @@
 import sys
 from Journal import Journal, People
 from Exceptions import IncorrectResponse
-from Entry import Base, Entry
+from Entry import Base, Entry, InterpersonalConflict
 from Submission import Submission
 
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, MetaData, create_engine
@@ -26,6 +26,7 @@ class JournalCLI():
         }
         self._types_of_submissions = {
             "interpersonal conflict": self._conflict_entry,
+            # TODO: add functionality
             "emotional trigger": self._trigger_entry,            
         }
         self._curr_person = None
@@ -83,13 +84,15 @@ class JournalCLI():
                     for choice in e._choices:
                         print(choice)
         
-            new_entry = self._create_entry()
-            self._session.add(new_entry)
-            self._session.commit()
+            new_entry = self._create_conflict_entry()
             new_submission.add_entry(new_entry)
+            self._session.add(new_entry)
+            self._session.add(new_submission)
+            self._session.commit()
+
             while True:
                 try:
-                    cont = input("Would you like to discuss another relationship? Yes or No. \n")
+                    cont = input("Would you like to discuss another relationship? Yes or No.\n>")
                     another_relationship = new_entry.yes_or_no(cont)
                     break
                 except IncorrectResponse as e:
@@ -136,9 +139,8 @@ class JournalCLI():
         else:
             raise IncorrectResponse(self._journal.get_people())
     
-    def _create_entry(self):
-        new_entry = Entry()
-        new_entry.add_person(self._curr_person)
+    def _create_conflict_entry(self):
+        new_entry = InterpersonalConflict(self._curr_person)
         self._session.add(new_entry)
         print("Great Choice!")
         while True:
@@ -218,8 +220,34 @@ class JournalCLI():
                 done = input("Remember, when you are close to someone, what you do or say around that person makes an impact, whether positive or negative.\nYour healthy communication score this time with {0} is {1}/3. Type anything to continue\n>".format(self._curr_person, new_entry._communication_score))
                 done = input("Effective, health communication is possible for you, and developing these skills can help you develop and build trust and safety with {0}. Type anything to continue\n>".format(self._curr_person))
             else:
-                next_steps = input("That's okay, you'll get there. What steps can you take to feel more secure with {0}?\n>".format(self._curr_person))
-                new_entry.add_steps_to_secure(next_steps)
+                while True:
+                    try:
+                        how_to_begin = input("Would you like to brainstorm ways to go about this conflict with {0}?\n>".format(self._curr_person))
+                        begin = new_entry.yes_or_no(how_to_begin)
+                        break 
+                    except IncorrectResponse as e:
+                        print("Please choose from the following choices: ") 
+                        for choice in e._choices:
+                            print(choice)
+                if begin:
+                    how_to_approach = input("An important aspect of healthy communication is asking consent from {0} and allowing both of you the space to address this conflict in the way that is safe for both of you.\n What is one way you could ask consent from {0} before entering in this conversation?\n>".format(self._curr_person))
+                    new_entry.add_how_to_approach(how_to_approach)
+                    their_side = input("We've already talked about what your experience of the conflict has been. Let's take a moment to think about {0}'s side of the conflict.\nCan you try to explain what you think is going on with {0} in relation to this conflict?\nPerhaps {0} doesn't know that there is a conflict, or perhaps this has been bothering them as well. Take a moment to describe what their perspective may be.\n>".format(self._curr_person))
+                    new_entry.add_their_side(their_side)
+                    print("Thank you for taking the time to empathize with {0}'s perspective. Empathy is one of the tools you can use to ensure that this conflict can be resolved in a healthy and safe manner.".format(self._curr_person))
+                    print("Before we focus on what exactly you might be able to say, let's remember some healthy communication techniques:")
+                    print("1) Use I-language")
+                    print("2) Focus on one problem at a time")
+                    print("3) Make sure to stay in touch with your physical and emotional responses and make sure you feel safe during the conversation")
+                    print("4) Pay attention to {0}'s physical and emotional comfort.".format(self._curr_person))
+                    print("Take a temporary break from the conversation if you need to")
+                    how_to_frame = input("What is another way you can make sure to have a safe and productive conflict resolution with {0}?\n>".format(self._curr_person))
+                    new_entry.add_how_to_frame(how_to_frame)
+                    intended = input("Now that we've brainstormed a bit about how to approach {0} about the conflict, what would you like to say to them to resolve it? Keep in mind the empathy and healthy communication practices mentioned previously.\n>".format(self._curr_person))
+                    new_entry.add_intended(intended)
+                else:
+                    next_steps = input("That's okay, you'll get there at whatever time is right for you. What steps can you take to feel more secure with {0}?\n>".format(self._curr_person))
+                    new_entry.add_steps_to_secure(next_steps)
             support = input("Experiencing a strain in one relationship can sometimes feel destabilizing. It's important that you exercise self compassion in seeking support from others. Where do you feel like you can get support right now?\n>")
             new_entry.add_support_from_others(support)
             done = input("Let's remember that if you've acted unpleasantly, you're not doing it on purpose. You're just expressing yourself in a way that's familiar to you and trying to get your needs met.\nType anything to continue.\n>")
@@ -233,11 +261,13 @@ class JournalCLI():
         else:
             gratitude = input("Finally, sometimes it's important to take the time to focus on the positive. Tell me more about the importance of this relationship in your life and why you're grateful for it.\n>".format(self._curr_person))
             new_entry.add_gratitude(gratitude)
-        
+        self._session.add(new_entry)
+        self._session.commit()
         return new_entry
     
     def _trigger_entry(self, new_submission):
         pass
+    
     def _check_stats(self):
         pass
 
@@ -254,38 +284,8 @@ class JournalCLI():
             if sub_num == "return to main menu":
                 return
             submission = self._journal.get_submission(int(sub_num) - 1)
-            print(submission._date)
-            filename = "Submission-" + sub_num
-            entries = submission.get_entries()
-            with open(filename, "w") as f:
-                f.write("Submission #" + sub_num + ": " + str(submission._date) + "\n")
-                count = 1
-                for entry in entries:
-                    f.write("Entry: " + str(count) + "\n")
-                    f.write("Person: " + entry._person + "\n")
-                    f.write("Anxiety Level: " + str(entry._anxiety) + "/3" + "\n")
-                    f.write("Closeness: " + str(entry._communal_strength) + "/3" + "\n")
-                    if entry._conflict is not None:
-                        f.write("Description of Conflict: " + entry._conflict + "\n")
-                    if entry._how_addressed is not None:
-                        f.write("How conflict was addressed: " + entry._how_addressed + "\n")
-                        f.write("Consent score: " + str(entry._consent) + "/1" + "\n")
-                        f.write("Self soothe score: " + str(entry._self_soothe1) + "/1" + "\n")
-                        f.write("Other soothe score: " + str(entry._other_soothe1) + "/1" + "\n")
-                        f.write("Total communication score: " + str(entry._communication_score) + "/3" + "\n")
-                    if entry._steps_to_secure is not None:
-                        f.write("Steps to security: " + entry._steps_to_secure + "\n")
-                    if entry._appreciate_other is not None:
-                        f.write("Appreciation of " + entry._person + ":" + entry._appreciate_other + "\n")
-                    if entry._appreciate_self is not None:
-                        f.write("Appreciation of self: " + entry._appreciate_self + "\n")
-                    if entry._gratitude is not None:
-                        f.write("Gratitude: " + entry._gratitude + "\n")
-                    if entry._support_from_others is not None:
-                        f.write("Support from others: " + entry._support_from_others + "\n")    
-                    f.write("______________________________\n")
-                    count += 1
-                print("Submission has been written to file.")
+            submission.write_submission_to_file(sub_num)
+            print("Submission has been written to file.")
 
     def _quit(self):
         sys.exit(0)
