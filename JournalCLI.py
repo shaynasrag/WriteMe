@@ -25,7 +25,7 @@ class JournalCLI():
             "quit": self._quit,
         }
         self._types_of_submissions = {
-            "interpersonal conflict": self._conflict_entry,
+            "interpersonal conflict": self._conflict_entry_driver,
             # TODO: add functionality
             "emotional trigger": self._trigger_entry,            
         }
@@ -71,41 +71,7 @@ class JournalCLI():
                 action(new_submission)
             else:
                 print("{0} is not a valid choice".format(choice))
-
-    def _conflict_entry(self, new_submission):
-        discuss = True
-        while discuss:   
-            while True:
-                try: 
-                    self._choose_person()
-                    break
-                except IncorrectResponse as e:   
-                    print("Please choose from the following choices: ") 
-                    for choice in e._choices:
-                        print(choice)
-        
-            new_entry = self._create_conflict_entry()
-            new_submission.add_entry(new_entry)
-            self._session.add(new_entry)
-            self._session.add(new_submission)
-            self._session.commit()
-
-            while True:
-                try:
-                    cont = input("Would you like to discuss another relationship? Yes or No.\n>")
-                    another_relationship = new_entry.yes_or_no(cont)
-                    break
-                except IncorrectResponse as e:
-                    print("Please choose from the following choices: ") 
-                    for choice in e._choices:
-                        print(choice)
-            if not another_relationship:
-                discuss = False
-                print("It's important to remember that having anxious tendencies doesn't make you a bad person or unworthy of love.\nSecure relationships are possible for you.")
-                print("Relationship security is earned through actions and behaviors that build both partners up and bring out the best in them.")
-                print("You may just have more challenges in this space to overcome than others.\n")
-                next = input("Thank you so much for working to understand yourself better and to work toward healthier and fulfilling relationships with the people in your life. See you next time! Type anything to return to the submission menu.\n>")
-
+    
     def _choose_person(self):
         print("Please select who you would like to journal about today (If you would like to add a new person, type 'New Person'):")
         name_ls = []
@@ -138,6 +104,40 @@ class JournalCLI():
             self._curr_person = person
         else:
             raise IncorrectResponse(self._journal.get_people())
+
+    def _conflict_entry_driver(self, new_submission):
+        discuss = True
+        while discuss:   
+            while True:
+                try: 
+                    self._choose_person()
+                    break
+                except IncorrectResponse as e:   
+                    print("Please choose from the following choices: ") 
+                    for choice in e._choices:
+                        print(choice)
+        
+            new_entry = self._create_conflict_entry()
+            new_submission.add_entry(new_entry)
+            self._session.add(new_entry)
+            self._session.add(new_submission)
+            self._session.commit()
+
+            while True:
+                try:
+                    cont = input("Would you like to discuss another relationship? Yes or No.\n>")
+                    another_relationship = new_entry.yes_or_no(cont)
+                    break
+                except IncorrectResponse as e:
+                    print("Please choose from the following choices: ") 
+                    for choice in e._choices:
+                        print(choice)
+            if not another_relationship:
+                discuss = False
+                print("It's important to remember that having anxious tendencies doesn't make you a bad person or unworthy of love.\nSecure relationships are possible for you.")
+                print("Relationship security is earned through actions and behaviors that build both partners up and bring out the best in them.")
+                print("You may just have more challenges in this space to overcome than others.\n")
+                next = input("Thank you so much for working to understand yourself better and to work toward healthier and fulfilling relationships with the people in your life. See you next time! Type anything to return to the submission menu.\n>")
     
     def _create_conflict_entry(self):
         new_entry = InterpersonalConflict(self._curr_person)
