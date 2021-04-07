@@ -227,5 +227,33 @@ class InterpersonalConflict(Entry):
         else:
             raise IncorrectResponse(["High Anxiety", "Mid Anxiety", "Low Anxiety", "No Anxiety"])
 
-
-    
+    def get_stats(self, obj, filter, session, names=None):
+        #     self._gratitude = None
+        # self._conflict = None
+        # self._steps_to_secure = None
+        # self._how_addressed = None
+        # self._appreciate_other = None
+        # self._appreciate_self = None
+        # self._support_from_others = None
+        # self._consent = None
+        # self._self_soothe1 = None
+        # self._other_soothe1 = None
+        # self._communication_score = 0
+        # self._communal_strength = None
+        # self._anxiety = None
+        # self._how_to_approach = None
+        # self._their_side = None
+        # self._how_to_frame = None
+        # self._intended = None
+        if names is not None:
+            results = session.query(obj).all()
+            anxiety_results = [r._anxiety for r in results]
+            return anxiety_results
+        else:
+            results_ls = []
+            for name in names:
+                results_ls.append(session.query(obj).filter(obj._person == name))
+            anxiety_results = []
+            for results in results_ls:
+                for r in results:
+                    anxiety_results.append(r._anxiety)

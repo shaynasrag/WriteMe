@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.session import sessionmaker
 
 from sqlalchemy.types import TypeDecorator
+import matplotlib.pyplot as plt
 
 class JournalCLI():
     def __init__(self):
@@ -269,8 +270,7 @@ class JournalCLI():
         pass
     
     def _check_stats(self):
-        pass
-
+        ls = get_stats(self, obj, filter, session, names=None)
     def _fetch_transcript(self):
         submissions = self._journal.get_submissions()
         while True:
@@ -296,7 +296,7 @@ if __name__ == "__main__":
 
     Session = sessionmaker()
     Session.configure(bind=engine)
-
+    sesh = Session()
     JournalCLI().run()
 
 

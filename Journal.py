@@ -12,9 +12,6 @@ class Journal(Base):
     _people = relationship("People")
     _name = Column(String)
  
-    # def __init__(self):
-    #     self._people = []
-    
     def add_submission(self, submission):
         self._submissions.append(submission)
     
@@ -38,7 +35,3 @@ class People(Base):
 
     def __init__(self, person):
         self._person = person
-
-    # def add_person(self, person, session):
-    #     if person not in session.query(self).all():
-    #         self._person = person
