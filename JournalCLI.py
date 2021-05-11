@@ -223,7 +223,7 @@ class JournalCLI():
             else:
                 while True:
                     try:
-                        how_to_begin = input("Would you like to brainstorm ways to go about this conflict with {0}?\n>".format(self._curr_person))
+                        how_to_begin = input("Would you like to brainstorm ways to go about this conflict with {0}?\nOptions: Yes or No>".format(self._curr_person))
                         begin = new_entry.yes_or_no(how_to_begin)
                         break 
                     except IncorrectResponse as e:
@@ -241,7 +241,7 @@ class JournalCLI():
                     print("2) Focus on one problem at a time")
                     print("3) Make sure to stay in touch with your physical and emotional responses and make sure you feel safe during the conversation")
                     print("4) Pay attention to {0}'s physical and emotional comfort.".format(self._curr_person))
-                    print("Take a temporary break from the conversation if you need to")
+                    print("5) Take a temporary break from the conversation if you need to")
                     how_to_frame = input("What is another way you can make sure to have a safe and productive conflict resolution with {0}?\n>".format(self._curr_person))
                     new_entry.add_how_to_frame(how_to_frame)
                     intended = input("Now that we've brainstormed a bit about how to approach {0} about the conflict, what would you like to say to them to resolve it? Keep in mind the empathy and healthy communication practices mentioned previously.\n>".format(self._curr_person))
