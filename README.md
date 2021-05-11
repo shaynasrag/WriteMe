@@ -37,5 +37,4 @@ Statistics are split into 3 categories: graphical representations of numerical d
 
 ## Youtube Walkthrough
 
-Click the image below to view my walkthrough of the Tkinter GUI (deprecated version from January) in this repo. In the video, I discuss ways in which I am hoping to optimize the performance in the web app version.
-[![Tkinter GUI Walkthrough](https://i9.ytimg.com/vi/_JiD7lCNH6I/mq3.jpg?sqp=CPT3zf8F&rs=AOn4CLDUyV28lsbSDzuV-QLigBMTcxQWiA)](https://www.youtube.com/watch?v=_JiD7lCNH6I)
+Coming soon!

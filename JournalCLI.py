@@ -271,6 +271,7 @@ class JournalCLI():
     
     def _check_stats(self):
         ls = get_stats(self, obj, filter, session, names=None)
+        
     def _fetch_transcript(self):
         submissions = self._journal.get_submissions()
         while True:
