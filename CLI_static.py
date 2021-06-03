@@ -39,10 +39,7 @@ text_dict = {
         "appreciate person": "When it comes to anxious attachments, sometimes conflicts can overwhelm our sense of stability in the relationship.\nWe can ground ourselves through gratitude. What is one thing you appreciate about REPLACE?\n>",
         "appreciate self": "We still need to keep in mind self-compassion. What is one thing you appreciate about yourself today?\n>",
         "gratitude": "Finally, sometimes it's important to take the time to focus on the positive. Tell me more about the importance of your relationship with REPLACE and why you're grateful for it.\n>"
-
-
     }
-
 
 def print_error(e):
     print("Please choose from the following choices: ") 
@@ -71,3 +68,8 @@ def validate(validator, input_string, input_placeholder=None):
             print_error(e)
 
     return True if valid else False
+
+def add_and_commit(session, add_list):
+    for thingToAdd in add_list:
+        session.add(thingToAdd)
+    session.commit() 
