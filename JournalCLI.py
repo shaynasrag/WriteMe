@@ -30,17 +30,34 @@ class JournalCLI():
             # TODO: add functionality
             "emotional trigger": self._trigger_entry,            
         }
+        self._text_dict = {
+            "greeting_new": "Hi! What's your name?\n>",
+            "greeting_old": "Hi {0}, what would you like to do today?".format(self._journal._name),
+            "topic": "What best describes what you would like to talk about right now?\nI am experiencing an...",
+            "select person": "Please select who you would like to journal about today (If you would like to add a new person, type 'New Person'):",
+            "new person": "Please enter the name of the new person you would like to add to your journal:\n>",
+            "person exists": "You have written about {0} before. Would you like your submission to be about {0} or would you like to start again?".format(self._chosen_person),
+            "another relationship": "Would you like to discuss another relationship? Yes or No.\n>",
+            "not another relationship": "It's important to remember that having anxious tendencies doesn't make you a bad person or unworthy of love.\nSecure relationships are possible for you.\n Relationship security is earned through actions and behaviors that build both partners up and bring out the best in them.\nYou may just have more challenges in this space to overcome than others.\nThank you so much for working to understand yourself better and to work toward healthier and fulfilling relationships with the people in your life. See you next time! Type anything to return to the submission menu.\n>"
+            "closeness": "How close are you feeling to {0} today?\nOptions: Close, Not So Close, Distanced\n>".format(self._curr_person),
+            
+        }
         self._curr_person = None
+        self._chosen_person = None
+    
+    def add_and_commit(self, add_list):
+        for thingToAdd in add_list:
+            self._session.add(thingToAdd)
+        self._session.commit()
 
     def _display_menu(self):
         if not self._journal._name:
-            name = input("Hi! What's your name?\n>")
+            name = input(self._text_dict["greeting_new"])
             self._journal._name = name
-            self._session.add(self._journal)
-            self._session.commit()
-            print("Hi {0}, would you like to do today?".format(self._journal._name))
+            self.add_and_commit([self._journal])
+            print(self._text_dict["greeting_old"])
         else:
-            print("Hi {0}, what would you like to do today?".format(self._journal._name))
+            print(self._text_dict["greeting_old"])
         options = ", ".join(self._choices.keys())
         print(options)
 
@@ -56,7 +73,7 @@ class JournalCLI():
             
     def _create_submission(self):        
         while True:
-            print("What best describes what you would like to talk about right now?\nI am experiencing an...")
+            print(self._text_dict["topic"])
             options = "\n".join(self._types_of_submissions.keys())
             print(options)
             print("return to main menu")
@@ -67,14 +84,13 @@ class JournalCLI():
             if action:
                 new_submission = Submission()
                 self._journal.add_submission(new_submission)
-                self._session.add(new_submission)
-                self._session.commit()
+                self.add_and_commit([new_submission])
                 action(new_submission)
             else:
                 print("{0} is not a valid choice".format(choice))
     
     def _choose_person(self):
-        print("Please select who you would like to journal about today (If you would like to add a new person, type 'New Person'):")
+        print(self._text_dict["select person"])
         name_ls = []
         for i in self._journal.get_people():
             print(i._person)
@@ -84,27 +100,28 @@ class JournalCLI():
         if choice in name_ls: 
             self._curr_person = choice
         elif choice == "New Person":
-            person = input("Please enter the name of the new person you would like to add to your journal:\n>")
-            if person in name_ls:
-                print("You have written about {0} before. Would you like your submission to be about {0} or would you like to start again?".format(person))
-                while True:                        
-                    new_choice = input("Options: {0}, Start Again\n>".format(person))
-                    if new_choice == person or new_choice.lower() == "start again":
-                        break
-                    else:
-                        print("Please type either {0} or 'Start Again'".format(person))
-                if new_choice == "Start Again":
-                    self._choose_person()
-                else:
-                    self._curr_person = new_choice     
-            p = People(person)
-            self._journal.add_person(p)
-            self._session.add(p)
-            self._session.add(self._journal)
-            self._session.commit()
-            self._curr_person = person
+            self._new_person()
         else:
             raise IncorrectResponse(self._journal.get_people())
+    
+    def _new_person(self):
+        self._chosen_person = input(self._text_dict["new person"])
+        if self._chosen_person in name_ls:
+            print(self._text_dict["person exists"])
+            while True:                        
+                new_choice = input("Options: {0}, Start Again\n>".format(self._chosen_person))
+                if new_choice == self._chosen_person or new_choice.lower() == "start again":
+                    break
+                else:
+                    print("Please type either {0} or 'Start Again'".format(self._chosen_person))
+            if new_choice == "Start Again":
+                self._choose_person()
+            else:
+                self._curr_person = new_choice     
+        p = People(self._chosen_person)
+        self._journal.add_person(p)
+        self.add_and_commit([p, self._journal])
+        self._curr_person = self._chosen_person
 
     def _conflict_entry_driver(self, new_submission):
         discuss = True
@@ -120,13 +137,11 @@ class JournalCLI():
         
             new_entry = self._create_conflict_entry()
             new_submission.add_entry(new_entry)
-            self._session.add(new_entry)
-            self._session.add(new_submission)
-            self._session.commit()
+            self.add_and_commit([new_entry, new_submission])
 
             while True:
                 try:
-                    cont = input("Would you like to discuss another relationship? Yes or No.\n>")
+                    cont = input(self._text_dict["another relationship"])
                     another_relationship = new_entry.yes_or_no(cont)
                     break
                 except IncorrectResponse as e:
@@ -135,18 +150,15 @@ class JournalCLI():
                         print(choice)
             if not another_relationship:
                 discuss = False
-                print("It's important to remember that having anxious tendencies doesn't make you a bad person or unworthy of love.\nSecure relationships are possible for you.")
-                print("Relationship security is earned through actions and behaviors that build both partners up and bring out the best in them.")
-                print("You may just have more challenges in this space to overcome than others.\n")
-                next = input("Thank you so much for working to understand yourself better and to work toward healthier and fulfilling relationships with the people in your life. See you next time! Type anything to return to the submission menu.\n>")
-    
+                print(self._text_dict["not another relationship"])
+
     def _create_conflict_entry(self):
         new_entry = InterpersonalConflict(self._curr_person)
-        self._session.add(new_entry)
+        self.add_and_commit([new_entry])
         print("Great Choice!")
         while True:
             try:
-                communal_strength = input("How close are you feeling to {0} today?\nOptions: Close, Not So Close, Distanced\n>".format(self._curr_person))
+                communal_strength = input(self._text_dict["closeness"])
                 new_entry.add_communal_strength(communal_strength)
                 break
             except IncorrectResponse as e:
@@ -262,8 +274,7 @@ class JournalCLI():
         else:
             gratitude = input("Finally, sometimes it's important to take the time to focus on the positive. Tell me more about the importance of this relationship in your life and why you're grateful for it.\n>".format(self._curr_person))
             new_entry.add_gratitude(gratitude)
-        self._session.add(new_entry)
-        self._session.commit()
+        self.add_and_commit([new_entry])
         return new_entry
     
     def _trigger_entry(self, new_submission):
