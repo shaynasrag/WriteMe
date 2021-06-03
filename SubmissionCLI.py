@@ -6,12 +6,13 @@ from EntryCLI import EntryCLI
 from Submission import Submission
 
 class SubmissionCLI():
-    def __init__(self, journal):
+    def __init__(self, journal, session):
         self.types_of_submissions = {
             "interpersonal conflict": self.conflict_entry_driver      
         }
         self.submission_options = "\n".join(self.types_of_submissions.keys())
         self.journal = journal
+        self.session = session
          
     def run(self):
         while True:
@@ -27,11 +28,11 @@ class SubmissionCLI():
         if action:
                 new_submission = Submission()
                 self.journal.add_submission(new_submission)
-                add_and_commit([new_submission])
+                add_and_commit(self.session, [new_submission])
                 action(new_submission)
         else:
             print_text("Not a valid action")
     
     def conflict_entry_driver(self, new_submission):
-        entryCLI = EntryCLI(new_submission, self.journal)
+        entryCLI = EntryCLI(new_submission, self.journal, self.session)
         entryCLI.run()

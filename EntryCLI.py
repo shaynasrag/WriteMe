@@ -4,10 +4,11 @@ from Journal import People
 from Exceptions import IncorrectResponse
 
 class EntryCLI():
-    def __init__(self, submission, journal):
+    def __init__(self, submission, journal, session):
         self.submission = submission
         self._curr_person = None
         self._journal = journal
+        self.session = session
 
     def run(self):
         discuss = True
@@ -15,7 +16,7 @@ class EntryCLI():
             self.validate_person()   
             new_entry = self._create_conflict_entry()
             self.submission.add_entry(new_entry)
-            add_and_commit([new_entry, self.submission])
+            add_and_commit(self.session, [new_entry, self.submission])
             if not self.validate(new_entry, "another relationship"):
                 print_text("not another relationship")
                 discuss = False
@@ -30,7 +31,9 @@ class EntryCLI():
     
     def _choose_person(self):
         name_ls = self._journal.get_people()
-        choice = self.get_person(name_ls)
+        print_text("select person")
+        print('\n'.join(name_ls))
+        choice = input(">")
         if choice in name_ls: 
             self._curr_person = choice
         elif choice == "New Person":
@@ -38,17 +41,12 @@ class EntryCLI():
         else:
             raise IncorrectResponse(name_ls)
     
-    def get_person(self, name_ls):
-        print_text("select person")
-        print('\n'.join(name_ls))
-        return input(">")
-    
     def _new_person(self, name_ls):
         self._chosen_person = get_input("new person")
         self.validate_new_person(name_ls)
         new_person = People(self._chosen_person)
         self._journal.add_person(new_person)
-        add_and_commit([new_person, self._journal])
+        add_and_commit(self.session, [new_person, self._journal])
         self._curr_person = self._chosen_person
     
     def validate_new_person(self, name_ls):
@@ -67,7 +65,6 @@ class EntryCLI():
 
     def _create_conflict_entry(self):
         new_entry = InterpersonalConflict(self._curr_person)
-
         self.respond_to_communal_strength(new_entry)
         validate(new_entry.add_anxiety, "anxiety")
 
@@ -75,7 +72,7 @@ class EntryCLI():
             self.add_input_to_entry(new_entry.add_gratitude, "gratitude", self._curr_person)   
         else:
             self.process_conflict(new_entry)  
-        add_and_commit([new_entry])
+        add_and_commit(self.session, [new_entry])
         return new_entry 
 
     def respond_to_communal_strength(self, new_entry):
@@ -97,7 +94,6 @@ class EntryCLI():
         self.appreciation_and_support(new_entry)
     
     def review_conflict(self, new_entry):
-
         self.add_input_to_entry(new_entry.add_addressed, "how addressed")
         validate(new_entry.add_consent, "consent", self._curr_person)
         validate(new_entry.add_self_soothe1, "self soothe1")

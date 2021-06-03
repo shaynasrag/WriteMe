@@ -47,16 +47,20 @@ def print_error(e):
         print(choice)
 
 def print_text(key, toReplace=None):
+    print(toReplace)
     string = text_dict[key]
     if toReplace:
-        string.replace("REPLACE", toReplace)
+        altered = string.replace("REPLACE", toReplace)
+        string = altered
     print(string)
 
 def get_input(key, toReplace=None):
     string = text_dict[key]
     if toReplace:
-        string.replace("REPLACE", toReplace)
-    text = input(">")
+        altered = string.replace("REPLACE", toReplace)
+        string = altered
+    text = input(string)
+    return text
 
 def validate(validator, input_string, input_placeholder=None):
     while True:

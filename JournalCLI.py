@@ -1,7 +1,6 @@
 import sys
 from Journal import Journal
-from Entry import Base, 
-from Submission import Submission
+from Entry import Base 
 from CLI_static import print_text, get_input, add_and_commit
 from SubmissionCLI import SubmissionCLI
 from TranscriptCLI import TranscriptCLI
@@ -14,6 +13,7 @@ class JournalCLI():
     def __init__(self):
         self.session = Session()
         self.journal = self.get_journal()
+        add_and_commit(self.session, [self.journal])
         self.choices = {
             "add submission": self.submission_driver,
             "check stats": self.stats_driver,
@@ -29,7 +29,6 @@ class JournalCLI():
         journal = self.session.query(Journal).first()
         if not journal:
             journal = Journal()
-            add_and_commit([self.journal])
         return journal
 
     def run(self):
@@ -50,7 +49,7 @@ class JournalCLI():
         print(self.options)
             
     def submission_driver(self):
-        submissionCLI = SubmissionCLI(self.journal)
+        submissionCLI = SubmissionCLI(self.journal, self.session)
         submissionCLI.run()
 
     def transcript_driver(self):
@@ -71,4 +70,5 @@ if __name__ == "__main__":
     Session = sessionmaker()
     Session.configure(bind=engine)
     sesh = Session()
-    JournalCLI().run()
+    journalCLI = JournalCLI()
+    journalCLI.run()
