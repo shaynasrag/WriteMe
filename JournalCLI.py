@@ -2,9 +2,7 @@ import sys
 from Journal import Journal
 from Entry import Base 
 from CLI_static import print_text, get_input, add_and_commit
-from SubmissionCLI import SubmissionCLI
-from TranscriptCLI import TranscriptCLI
-from StatsCLI import StatsCLI
+from ActionCLI import SubmissionCLI, TranscriptCLI, StatsCLI
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm.session import sessionmaker
@@ -12,24 +10,18 @@ from sqlalchemy.orm.session import sessionmaker
 class JournalCLI():
     def __init__(self):
         self.session = Session()
-        self.journal = self.get_journal()
+        self.journal = self.set_journal()
         add_and_commit(self.session, [self.journal])
         self.choices = {
-            "add submission": self.submission_driver,
-            "check stats": self.stats_driver,
-            "fetch transcript": self.transcript_driver,
+            "add submission": SubmissionCLI(self.journal, self.session).run,
+            "check stats": StatsCLI(self.journal, self.session).run,
+            "fetch transcript": TranscriptCLI(self.journal, self.session).run,
             "quit": quit,
         }
         
         self.options = ", ".join(self.choices.keys())
         self.curr_person = None
         self.chosen_person = None
-    
-    def get_journal(self):
-        journal = self.session.query(Journal).first()
-        if not journal:
-            journal = Journal()
-        return journal
 
     def run(self):
         while True:
@@ -47,18 +39,12 @@ class JournalCLI():
             self.journal._name = name
         print_text("greeting_old", self.journal._name)
         print(self.options)
-            
-    def submission_driver(self):
-        submissionCLI = SubmissionCLI(self.journal, self.session)
-        submissionCLI.run()
-
-    def transcript_driver(self):
-        transcriptCLI = TranscriptCLI(self.journal)
-        transcriptCLI.run()          
     
-    def stats_driver(self):
-        statsCLI = StatsCLI(self.journal)
-        statsCLI.run()
+    def set_journal(self):
+        journal = self.session.query(Journal).first()
+        if not journal:
+            journal = Journal()
+        return journal
         
     def quit(self):
         sys.exit(0)

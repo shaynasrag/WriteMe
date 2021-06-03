@@ -76,10 +76,10 @@ class EntryCLI():
         return new_entry 
 
     def respond_to_communal_strength(self, new_entry):
-        close = validate(new_entry.add_communal_strength, "closeness")
+        close = validate(new_entry.add_communal_strength, "closeness", self._curr_person)
         print_text("glad to hear", self._curr_person) if close else print_text("sorry to hear", self._curr_person)
 
-    def add_input_to_entry(self, adder, input_string, input_placeholder):
+    def add_input_to_entry(self, adder, input_string, input_placeholder=None):
         toAdd = get_input(input_string, input_placeholder)
         adder(toAdd)
 
@@ -99,7 +99,7 @@ class EntryCLI():
         validate(new_entry.add_self_soothe1, "self soothe1")
         validate(new_entry.add_other_soothe1, "other soothe1", self._curr_person)
         
-        display_communication_score = get_input("communication score", new_entry._communication_score)
+        display_communication_score = get_input("communication score", str(new_entry._communication_score))
         conclusion = get_input("effective communication", self._curr_person)
 
     def prepare_to_address(self, new_entry):

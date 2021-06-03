@@ -35,7 +35,7 @@ text_dict = {
         "intended": "Now that we've brainstormed a bit about how to approach REPLACE about the conflict, what would you like to say to them to resolve it? Keep in mind the empathy and healthy communication practices mentioned previously.\n>",
         "next steps": "That's okay, you'll get there at whatever time is right for you. What steps can you take to feel more secure with REPLACE?\n>",
         "support": "Experiencing a strain in one relationship can sometimes feel destabilizing. It's important that you exercise self compassion in seeking support from others. Where do you feel like you can get support right now?\n>",
-        "self compassion": "Let's remember that if you've acted unpleasantly, you're not doing it on purpose. You're just expressing yourself in a way that's familiar to you and trying to get your needs met.\nType anything to continue.\n>Self compassion may be unfamiliar because you've learned to condemn, criticize, or judge yourself when you learn something you don't like about yourself.\nLet's zoom in on how you reacted to the conflict between you and REPLACE.\nZoom in on yourself during your conflict and repeat one or more of the following phrases:\nI see how you suffer just as anyone else does.\nMay you be happy.\nMay you be free from pain.\nAnything else that the you in the scene needs to hear in order to know that this difficulty is seen and acknowledged.\nType anything to continue.\n>",
+        "self compassion": "Let's remember that if you've acted unpleasantly, you're not doing it on purpose. You're just expressing yourself in a way that's familiar to you and trying to get your needs met.\nType anything to continue.\n>Self compassion may be unfamiliar because you've learned to condemn, criticize, or judge yourself when you learn something you don't like about yourself.\nLet's zoom in on how you reacted to the conflict between you and REPLACE.\nZoom in on yourself during your conflict and repeat one or more of the following phrases:\nI see how you suffer just as anyone else does.\nMay you be happy.\nMay you be free from pain.\nAnything else that the you in the scene needs to hear in order to know that this difficulty is seen and acknowledged.\n",
         "appreciate person": "When it comes to anxious attachments, sometimes conflicts can overwhelm our sense of stability in the relationship.\nWe can ground ourselves through gratitude. What is one thing you appreciate about REPLACE?\n>",
         "appreciate self": "We still need to keep in mind self-compassion. What is one thing you appreciate about yourself today?\n>",
         "gratitude": "Finally, sometimes it's important to take the time to focus on the positive. Tell me more about the importance of your relationship with REPLACE and why you're grateful for it.\n>"
@@ -47,7 +47,6 @@ def print_error(e):
         print(choice)
 
 def print_text(key, toReplace=None):
-    print(toReplace)
     string = text_dict[key]
     if toReplace:
         altered = string.replace("REPLACE", toReplace)
