@@ -22,7 +22,7 @@ class Journal(Base):
         return self._submissions[index]
     
     def get_people(self):
-        return self._people
+        return [p._person for p in self._people]
     
     def add_person(self, person):
         self._people.append(person)    
