@@ -15,7 +15,16 @@ This program takes the form of Python's tkinter graphical user interface (GUI). 
 ``sqlalchemy``
 
 My focus in developing this program is primarily on the backend design and efficiency. I default to CLI and GUI frontend options as a way to represent the data used.
- 
+
+## How it works
+
+### Responding to User Input
+
+The following image displays a high-level overview of the path the program will follow depending on the user's input. Note that there are more questions asked (indicated by the rectangles)and there are more responses requested (indicated by the circles) than displayed in this graphic.
+
+![E0AAD655-DBE5-4566-9138-6FE182A8CE21_1_105_c](https://user-images.githubusercontent.com/54994003/120726395-d4d31180-c48c-11eb-98ea-24adc02d6967.jpeg)
+
+
 ## How to Use
 
 ### Purpose
