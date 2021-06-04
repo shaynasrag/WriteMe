@@ -12,6 +12,7 @@ This project combines two of my greatest passions: psychology and computer scien
 
 ### Form
 This program takes the form of Python's tkinter graphical user interface (GUI). It must be run on a local computer and requires the following dependencies on top of Python 3.8:
+
 ``tkinter``
 
 ``sqlalchemy``
