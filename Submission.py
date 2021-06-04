@@ -42,6 +42,12 @@ class Submission(Base):
                     f.write("Self soothe score: " + str(entry._self_soothe1) + "/1" + "\n")
                     f.write("Other soothe score: " + str(entry._other_soothe1) + "/1" + "\n")
                     f.write("Total communication score: " + str(entry._communication_score) + "/3" + "\n")
+                if entry._how_to_approach is not None:
+                    f.write("How to approach: " + entry._how_to_approach + "\n")
+                    f.write("Their side: " + entry._their_side + "\n")
+                    f.write("Another way to make the conversation feel safe: " + entry._how_to_approach + "\n")
+                    f.write("What to say: " + entry._how_to_approach + "\n")
+                    
                 if entry._steps_to_secure is not None:
                     f.write("Steps to security: " + entry._steps_to_secure + "\n")
                 if entry._appreciate_other is not None:

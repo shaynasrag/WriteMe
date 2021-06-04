@@ -2,7 +2,6 @@ from Exceptions import IncorrectResponse
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, MetaData, Float, Boolean
-from MyTime import MyTime
 
 Base = declarative_base()
 

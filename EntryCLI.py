@@ -68,14 +68,15 @@ class EntryCLI():
             self.add_input_to_entry(self.entry.add_steps_to_secure, "next steps", self._curr_person)
 
     def appreciation_and_support(self):
-        self.add_input_to_entry(self.entry.add_support_from_others, "supprt")
+        self.add_input_to_entry(self.entry.add_support_from_others, "support")
         self_compassion = get_input("self compassion", self._curr_person)   
-        self.add_input_to_entry(self.entry.add_appreciate_other, "appreciate person", self.curr_person)         
-        self.add_input_to_entry(self.entry._appreciate_self, "appreciate self")
+        self.add_input_to_entry(self.entry.add_appreciate_other, "appreciate person", self._curr_person)         
+        self.add_input_to_entry(self.entry.add_appreciate_self, "appreciate self")
     
     def add_input_to_entry(self, adder, input_string, input_placeholder=None):
         toAdd = get_input(input_string, input_placeholder)
         adder(toAdd)
+        add_and_commit(self.session, [self.entry])
 
     def validate_person(self):
         while True:
