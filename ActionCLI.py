@@ -25,7 +25,7 @@ class SubmissionCLI(ActionCLI):
         super().__init__(*args, **kwargs)
         self.submission = None
         self.types_of_submissions = {
-            "interpersonal conflict": EntryCLI(self.submission, self.journal, self.session).run      
+            "interpersonal conflict": EntryCLI  
         }
         self.submission_options = "\n".join(self.types_of_submissions.keys())
 
@@ -38,6 +38,7 @@ class SubmissionCLI(ActionCLI):
                     return
                 action = self.types_of_submissions.get(choice)
                 self.validate_action(action)
+                action(self.submission, self.journal, self.session).run()  
         
     def validate_action(self, action):
         if action:
@@ -45,7 +46,6 @@ class SubmissionCLI(ActionCLI):
                 self.journal.add_submission(new_submission)
                 add_and_commit(self.session, [new_submission])
                 self.submission = new_submission
-                action()
         else:
             print_text("Not a valid action")
 

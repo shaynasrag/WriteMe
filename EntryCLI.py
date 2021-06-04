@@ -17,7 +17,7 @@ class EntryCLI():
             new_entry = self._create_conflict_entry()
             self.submission.add_entry(new_entry)
             add_and_commit(self.session, [new_entry, self.submission])
-            if not self.validate(new_entry, "another relationship"):
+            if not validate(new_entry.yes_or_no, "another relationship"):
                 print_text("not another relationship")
                 discuss = False
     
@@ -36,7 +36,7 @@ class EntryCLI():
         choice = input(">")
         if choice in name_ls: 
             self._curr_person = choice
-        elif choice == "New Person":
+        elif choice.lower() == "new person":
             self._curr_person = self._new_person(name_ls)
         else:
             raise IncorrectResponse(name_ls)
@@ -47,7 +47,7 @@ class EntryCLI():
         new_person = People(self._chosen_person)
         self._journal.add_person(new_person)
         add_and_commit(self.session, [new_person, self._journal])
-        self._curr_person = self._chosen_person
+        return new_person._person
     
     def validate_new_person(self, name_ls):
         if self._chosen_person in name_ls:
@@ -108,7 +108,7 @@ class EntryCLI():
             self.add_input_to_entry(new_entry.add_their_side, "their side", self._curr_person)
             print_text("healthy communication", self._curr_person)
             self.add_input_to_entry(new_entry.add_how_to_frame, "how to frame", self._curr_person)
-            self.add_input_to_entry(new_entry.intended, "intended", self._curr_person)
+            self.add_input_to_entry(new_entry.add_intended, "intended", self._curr_person)
         else:
             next_steps = get_input("next steps", self._curr_person)
             new_entry.add_steps_to_secure(next_steps)            
