@@ -1,22 +1,19 @@
-from CLI_static import print_text, print_error, validate, get_input, add_and_commit
+from static import print_text, validate, get_input, add_and_commit
 from Entry import InterpersonalConflict
-from Journal import People
-from Exceptions import IncorrectResponse
 
 class EntryCLI():
     def __init__(self, submission, journal, session):
         self.submission = submission
-        self._curr_person = None
         self._journal = journal
         self.session = session
         self.entry = None
+        self._curr_person = None
 
     def run(self):
         discuss = True
         while discuss:
-            self.validate_person()   
-            new_entry = self.create_conflict_entry()
-            self.entry = new_entry
+            self.choose_person(self._journal.get_people())   
+            self.entry = self.create_conflict_entry()
             self.submission.add_entry(self.entry)
             add_and_commit(self.session, [self.entry, self.submission])
             if not validate(self.entry.yes_or_no, "another relationship"):
@@ -25,7 +22,7 @@ class EntryCLI():
 
     def create_conflict_entry(self):
         self.entry = InterpersonalConflict(self._curr_person)
-        self.respond_to_communal_strength()
+        self.communal_strength()
         validate(self.entry.add_anxiety, "anxiety")
 
         if not validate(self.entry.yes_or_no, "conflict", self._curr_person): 
@@ -35,7 +32,7 @@ class EntryCLI():
         add_and_commit(self.session, [self.entry])
         return self.entry 
 
-    def respond_to_communal_strength(self):
+    def communal_strength(self):
         close = validate(self.entry.add_communal_strength, "closeness", self._curr_person)
         print_text("glad to hear", self._curr_person) if close else print_text("sorry to hear", self._curr_person)
 
@@ -77,45 +74,12 @@ class EntryCLI():
         toAdd = get_input(input_string, input_placeholder)
         adder(toAdd)
         add_and_commit(self.session, [self.entry])
-
-    def validate_person(self):
-        while True:
-            try: 
-                self._choose_person()
-                break
-            except IncorrectResponse as e:
-                print_error(e)
     
-    def _choose_person(self):
-        name_ls = self._journal.get_people()
-        print_text("select person")
-        print('\n'.join(name_ls))
-        choice = input(">")
-        if choice in name_ls: 
-            self._curr_person = choice
-        elif choice.lower() == "new person":
-            self._curr_person = self._new_person(name_ls)
-        else:
-            raise IncorrectResponse(name_ls)
-    
-    def _new_person(self, name_ls):
-        self._chosen_person = get_input("new person")
-        self.validate_new_person(name_ls)
-        new_person = People(self._chosen_person)
-        self._journal.add_person(new_person)
-        add_and_commit(self.session, [new_person, self._journal])
-        return new_person._person
-    
-    def validate_new_person(self, name_ls):
-        if self._chosen_person in name_ls:
-            print_text("person exists", self._chosen_person)
-            while True:                        
-                new_choice = get_input("options/start again", self._chosen_person)
-                if new_choice == self._chosen_person or new_choice.lower() == "start again":
-                    break
-                else:
-                    print_text("wrong/start again", self._chosen_person)
-            if new_choice == "Start Again":
-                self._choose_person()
-            else:
-                return new_choice
+    def choose_person(self, name_ls):        
+        self._curr_person = validate(self._journal.person_exists, "select person", '\n'.join(name_ls) + ' ')
+        if not self._curr_person:
+            new_name = get_input("new person")
+            new_person = self._journal.add_person(new_name)
+            if new_person:
+                add_and_commit(self.session, [new_person, self._journal])
+            self._curr_person = new_name
