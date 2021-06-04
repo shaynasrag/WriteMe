@@ -32,7 +32,7 @@ The following image shows how the Journal is structured. When the program is fir
 
 This goal of each entry is to create an interactive environement in which the user can work through an interpersonal conflict in relation to a particular person. Each entry is based in a relationship between the user and another person and can follow one of the paths depicted in the image below. The graphic below displays a high level overview of the possible forms an entry can take. Note that there are more questions asked (indicated by the rectangles)and there are more responses requested (indicated by the circles) than displayed in this graphic.
 
-![image](https://user-images.githubusercontent.com/54994003/120746427-09a68f00-c4b4-11eb-8d6b-12f2f6ea8ea0.png)
+![image](https://user-images.githubusercontent.com/54994003/120749074-c13da000-c4b8-11eb-90ff-67f2cc59c8bb.png)
 
 
 ## How to Use
