@@ -25,14 +25,14 @@ My focus in developing this program is primarily on the backend design and effic
 
 The following image shows how the Journal is structured. When the program is first accessed, an instance of the journal is created. Every use of the journal creates an instance of a submission and within every submission, a user can submit multiple entries. The user can submit multiple entries on multiple people, and all of those entries are stored in one submission at the time of access. Repeated use accumulates multiple submissions.
 
-![image](https://user-images.githubusercontent.com/54994003/120746321-cb10d480-c4b3-11eb-91d6-8a48b4a0a05c.png)
+![image](https://user-images.githubusercontent.com/54994003/120746447-14f9ba80-c4b4-11eb-8cc0-3380df877af9.png)
 
 
 ### Structure of the Entry
 
 This goal of each entry is to create an interactive environement in which the user can work through an interpersonal conflict in relation to a particular person. Each entry is based in a relationship between the user and another person and can follow one of the paths depicted in the image below. The graphic below displays a high level overview of the possible forms an entry can take. Note that there are more questions asked (indicated by the rectangles)and there are more responses requested (indicated by the circles) than displayed in this graphic.
 
-![E0AAD655-DBE5-4566-9138-6FE182A8CE21_1_105_c](https://user-images.githubusercontent.com/54994003/120726395-d4d31180-c48c-11eb-98ea-24adc02d6967.jpeg)
+![image](https://user-images.githubusercontent.com/54994003/120746427-09a68f00-c4b4-11eb-8d6b-12f2f6ea8ea0.png)
 
 
 ## How to Use
