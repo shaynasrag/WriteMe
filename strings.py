@@ -1,11 +1,8 @@
-from Exceptions import IncorrectResponse
-import Entry
-
 text_dict = {
         "greeting_new": "Hi! What's your name?\n>",
         "greeting_old": "Hi REPLACE, what would you like to do today?",
         "topic": "What best describes what you would like to talk about right now?\nI am experiencing an...",
-        "select person": "Please select who you would like to journal about today (If you would like to add a new person, type 'New Person'):",
+        "select person": "Please select who you would like to journal about today (If you would like to add a new person, type 'New Person'):\nREPLACE\n>",
         "new person": "Please enter the name of the new person you would like to add to your journal:\n>",
         "person exists": "You have written about REPLACE before. Would you like your submission to be about REPLACE or would you like to start again?",
         "another relationship": "Would you like to discuss another relationship? Yes or No.\n>",
@@ -40,39 +37,3 @@ text_dict = {
         "appreciate self": "We still need to keep in mind self-compassion. What is one thing you appreciate about yourself today?\n>",
         "gratitude": "Finally, sometimes it's important to take the time to focus on the positive. Tell me more about the importance of your relationship with REPLACE and why you're grateful for it.\n>"
     }
-
-def print_error(e):
-    print("Please choose from the following choices: ") 
-    for choice in e._choices:
-        print(choice)
-
-def print_text(key, toReplace=None):
-    string = text_dict[key]
-    if toReplace:
-        altered = string.replace("REPLACE", toReplace)
-        string = altered
-    print(string)
-
-def get_input(key, toReplace=None):
-    string = text_dict[key]
-    if toReplace:
-        altered = string.replace("REPLACE", toReplace)
-        string = altered
-    text = input(string)
-    return text
-
-def validate(validator, input_string, input_placeholder=None):
-    while True:
-        try:
-            response = get_input(input_string, input_placeholder)
-            valid = validator(response)
-            break
-        except IncorrectResponse as e:
-            print_error(e)
-
-    return True if valid else False
-
-def add_and_commit(session, add_list):
-    for thingToAdd in add_list:
-        session.add(thingToAdd)
-    session.commit() 

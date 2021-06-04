@@ -1,7 +1,4 @@
-from CLI_static import print_text, print_error, validate, get_input, add_and_commit
-from Entry import InterpersonalConflict
-from Journal import People
-from Exceptions import IncorrectResponse
+from static import print_text, add_and_commit
 from EntryCLI import EntryCLI
 from Submission import Submission
 

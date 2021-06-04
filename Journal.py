@@ -1,3 +1,4 @@
+from Exceptions import IncorrectResponse
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, MetaData, create_engine
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.session import sessionmaker
@@ -24,8 +25,20 @@ class Journal(Base):
     def get_people(self):
         return [p._person for p in self._people]
     
-    def add_person(self, person):
-        self._people.append(person)    
+    def add_person(self, name):
+        if name not in self.get_people():
+            person = People(name)
+            self._people.append(person)
+            return person
+        return None
+
+    def person_exists(self, person):
+        if person in self.get_people():
+            return person
+        elif person.lower() == "new person":
+            return False
+        else:
+            raise IncorrectResponse(self.get_people())    
     
 class People(Base):
     __tablename__ = "people"

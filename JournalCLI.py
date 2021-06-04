@@ -1,7 +1,7 @@
 import sys
 from Journal import Journal
 from Entry import Base 
-from CLI_static import print_text, get_input, add_and_commit
+from static import print_text, get_input, add_and_commit
 from ActionCLI import SubmissionCLI, TranscriptCLI, StatsCLI
 
 from sqlalchemy import create_engine
