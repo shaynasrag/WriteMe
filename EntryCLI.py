@@ -13,15 +13,15 @@ class EntryCLI():
         discuss = True
         while discuss:
             self.choose_person(self._journal.get_people())   
-            self.entry = self.create_conflict_entry()
+            self.entry = InterpersonalConflict(self._curr_person)
+            self.begin_conflict_entry()
             self.submission.add_entry(self.entry)
             add_and_commit(self.session, [self.entry, self.submission])
             if not validate(self.entry.yes_or_no, "another relationship"):
                 print_text("not another relationship")
                 discuss = False
 
-    def create_conflict_entry(self):
-        self.entry = InterpersonalConflict(self._curr_person)
+    def begin_conflict_entry(self):
         self.communal_strength()
         validate(self.entry.add_anxiety, "anxiety")
 
@@ -30,7 +30,6 @@ class EntryCLI():
         else:
             self.talk_about_conflict()  
         add_and_commit(self.session, [self.entry])
-        return self.entry 
 
     def communal_strength(self):
         close = validate(self.entry.add_communal_strength, "closeness", self._curr_person)
