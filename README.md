@@ -5,9 +5,11 @@
 ### Backstory
 This program was inspired by my sophomore fall university course, Attraction and Relationships, taught by Dr. Jennifer Hirsch. The goal of this program is to collect data, track progress and develop positive and healthy mindsets towards relationships.
 
-This program is designed specifically for those who identify along the anxious attachment; however, since attachment theory exists on a spectrum, likely everyone would benefit from the introspection prompted by this program.
 
 Further (implemented and intended) optimization of the backend structure of this code comes from my sophomore spring university course, Object Oriented Programming, taught by Dr. Timothy Barron. Optimizations include object oriented design structure built with CLI and Tkinter GUI frontend options, the use of sqlalchemy databases, default AND custom exception handling, and logging.
+
+This project combines two of my greatest passions: psychology and computer science. The goal of this project is to develop intuitive and maintainable code that positively impacts the world.
+
 ### Form
 This program takes the form of Python's tkinter graphical user interface (GUI). It must be run on a local computer and requires the following dependencies on top of Python 3.8:
 ``tkinter``
@@ -18,18 +20,18 @@ My focus in developing this program is primarily on the backend design and effic
 
 ## How it works
 
-### Responding to User Input
-
-The following image displays a high-level overview of the path the program will follow depending on the user's input. Note that there are more questions asked (indicated by the rectangles)and there are more responses requested (indicated by the circles) than displayed in this graphic.
-
-![E0AAD655-DBE5-4566-9138-6FE182A8CE21_1_105_c](https://user-images.githubusercontent.com/54994003/120726395-d4d31180-c48c-11eb-98ea-24adc02d6967.jpeg)
-
 ### Structure of the Journal
 
-The following image shows how the Journal is structured. When the program is first accessed, a journal is created. Every use of the journal creates an instance of a "submission" and within every submission, a user can submit multiple entries. The user can submit multiple entries on multiple people, and all of those entries are stored in one submission at the time of access.
+The following image shows how the Journal is structured. When the program is first accessed, a in instance of the journal is created. Every use of the journal creates an instance of a submission and within every submission, a user can submit multiple entries. The user can submit multiple entries on multiple people, and all of those entries are stored in one submission at the time of access. Repeated use accumulates multiple submissions.
 
 ![image](https://user-images.githubusercontent.com/54994003/120744955-f9d97b80-c4b0-11eb-9e69-e586b2aa0f14.png)
 
+
+### Structure of the Entry
+
+This goal of each entry is to create an interactive environement in which the user can work through an interpersonal conflict in relation to a particular person. Each entry is based in a relationship between the user and another person and can follow one of the paths depicted in the image below. The graphic below displays a high level overview of the possible forms an entry can take. Note that there are more questions asked (indicated by the rectangles)and there are more responses requested (indicated by the circles) than displayed in this graphic.
+
+![E0AAD655-DBE5-4566-9138-6FE182A8CE21_1_105_c](https://user-images.githubusercontent.com/54994003/120726395-d4d31180-c48c-11eb-98ea-24adc02d6967.jpeg)
 
 
 ## How to Use
@@ -42,14 +44,11 @@ This program is a mix of a therapeutic experience as well as an analytical, long
 
 All data is stored locally in a sqlalchemy database.
 
-### Submissions vs Statistics
+### How to Run
 
-There are two main functions of the GUI: to add a submission or to view the statistics agregated from the previous submissions. 
+Command Line Interface: ``python JournalCLI.py``
 
-Submissions focus on specific relationships and the user is prompted to focus on a particular person. The submission can take on 3 possible forms dependent on factors of anxiety levels in the relationship as well as present conflicts and how they are addressed.
-
-Statistics are split into 3 categories: graphical representations of numerical data, text renderings of submissions based on specific people (which may contain various categories), and text renderings of submissions based on specific categories (which may contain various people) within a given time frame. (My hope for the web-based version is to integrate more people and more categories in a single graph.)
-
+Graphical User Interace (Tkinter GUI -- coming soon): ``python JournalGUI.py``
 
 ## Youtube Walkthrough
 
