@@ -25,7 +25,7 @@ My focus in developing this program is primarily on the backend design and effic
 
 The following image shows how the Journal is structured. When the program is first accessed, an instance of the journal is created. Every use of the journal creates an instance of a submission and within every submission, a user can submit multiple entries. The user can submit multiple entries on multiple people, and all of those entries are stored in one submission at the time of access. Repeated use accumulates multiple submissions.
 
-![image](https://user-images.githubusercontent.com/54994003/120744955-f9d97b80-c4b0-11eb-9e69-e586b2aa0f14.png)
+![image](https://user-images.githubusercontent.com/54994003/120746321-cb10d480-c4b3-11eb-91d6-8a48b4a0a05c.png)
 
 
 ### Structure of the Entry
