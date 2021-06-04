@@ -24,6 +24,13 @@ The following image displays a high-level overview of the path the program will 
 
 ![E0AAD655-DBE5-4566-9138-6FE182A8CE21_1_105_c](https://user-images.githubusercontent.com/54994003/120726395-d4d31180-c48c-11eb-98ea-24adc02d6967.jpeg)
 
+### Structure of the Journal
+
+The following image shows how the Journal is structured. When the program is first accessed, a journal is created. Every use of the journal creates an instance of a "submission" and within every submission, a user can submit multiple entries. The user can submit multiple entries on multiple people, and all of those entries are stored in one submission at the time of access.
+
+![image](https://user-images.githubusercontent.com/54994003/120744955-f9d97b80-c4b0-11eb-9e69-e586b2aa0f14.png)
+
+
 
 ## How to Use
 
