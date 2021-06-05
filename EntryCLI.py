@@ -32,8 +32,8 @@ class EntryCLI():
         add_and_commit(self.session, [self.entry])
 
     def communal_strength(self):
-        close = validate(self.entry.add_communal_strength, "closeness", self._curr_person)
-        print_text("glad to hear", self._curr_person) if close else print_text("sorry to hear", self._curr_person)
+        feeling_close = validate(self.entry.add_communal_strength, "closeness", self._curr_person)
+        print_text("glad to hear", self._curr_person) if feeling_close else print_text("sorry to hear", self._curr_person)
 
     def talk_about_conflict(self):
         self.add_input_to_entry(self.entry.add_conflict, "conflict description")
@@ -41,7 +41,7 @@ class EntryCLI():
         if validate(self.entry.yes_or_no, "addressed", self._curr_person):
             self.review_conflict()
         else:
-            self.brainstorm()
+            self.brainstorm_how_to_resolve()
         self.appreciation_and_support()
     
     def review_conflict(self):
@@ -53,7 +53,7 @@ class EntryCLI():
         display_communication_score = get_input("communication score", str(self.entry._communication_score))
         conclusion = get_input("effective communication", self._curr_person)
 
-    def brainstorm(self):
+    def brainstorm_how_to_resolve(self):
         if validate(self.entry.yes_or_no, "how to begin", self._curr_person):
             self.add_input_to_entry(self.entry.add_how_to_approach, "how to approach", self._curr_person)
             self.add_input_to_entry(self.entry.add_their_side, "their side", self._curr_person)
@@ -69,11 +69,6 @@ class EntryCLI():
         self.add_input_to_entry(self.entry.add_appreciate_other, "appreciate person", self._curr_person)         
         self.add_input_to_entry(self.entry.add_appreciate_self, "appreciate self")
     
-    def add_input_to_entry(self, adder, input_string, input_placeholder=None):
-        toAdd = get_input(input_string, input_placeholder)
-        adder(toAdd)
-        add_and_commit(self.session, [self.entry])
-    
     def choose_person(self, name_ls):        
         self._curr_person = validate(self._journal.person_exists, "select person", '\n'.join(name_ls) + ' ')
         if not self._curr_person:
@@ -82,3 +77,8 @@ class EntryCLI():
             if new_person:
                 add_and_commit(self.session, [new_person, self._journal])
             self._curr_person = new_name
+
+    def add_input_to_entry(self, adder, input_string, input_placeholder=None):
+        toAdd = get_input(input_string, input_placeholder)
+        adder(toAdd)
+        add_and_commit(self.session, [self.entry])

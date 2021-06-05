@@ -9,28 +9,22 @@ def print_error(e):
 def print_text(key, toReplace=None):
     string = text_dict[key]
     if toReplace:
-        altered = string.replace("REPLACE", toReplace)
-        string = altered
+        string = string.replace("REPLACE", toReplace)
     print(string)
 
 def get_input(key, toReplace=None):
     string = text_dict[key]
     if toReplace:
-        altered = string.replace("REPLACE", toReplace)
-        string = altered
-    text = input(string)
-    return text
+        string = string.replace("REPLACE", toReplace)
+    return input(string)
 
 def validate(validator, input_string, input_placeholder=None):
     while True:
         try:
             response = get_input(input_string, input_placeholder)
-            valid = validator(response)
-            break
+            return validator(response)
         except IncorrectResponse as e:
             print_error(e)
-
-    return valid if valid else None
 
 def add_and_commit(session, add_list):
     for thingToAdd in add_list:
