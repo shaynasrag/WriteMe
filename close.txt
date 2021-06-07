@@ -1,0 +1,6 @@
+Query Number: 1, Category: closeness
+Date: 6-6-2021, Person: Alice, Closeness: 3
+Date: 6-6-2021, Person: Bob, Closeness: 3
+Date: 6-6-2021, Person: Charlie, Closeness: 2
+Date: 6-6-2021, Person: Alice, Closeness: 1
+

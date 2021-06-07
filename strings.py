@@ -37,31 +37,23 @@ text_dict = {
         "appreciate self": "We still need to keep in mind self-compassion. What is one thing you appreciate about yourself today?\n>",
         "gratitude": "Finally, sometimes it's important to take the time to focus on the positive. Tell me more about the importance of your relationship with REPLACE and why you're grateful for it.\n>",
         "welcome to stats": "Welcome to your analysis environment.\nHere, you can view data based on your previous submissions and filter them based on person, category, or date range.\n",
-        "people stats": "If you would like to view your submissions on a specific person, type their name here. Otherwise, type 'Everyone':\nOptions: REPLACE\n>",
-        "category stats": "If you would like to view your submissions within a specific category, type that category here:\nOptions: REPLACE\n>",
+        "people stats": "If you would like to view your submissions on a specific person, type their name here. Otherwise, type 'Everyone':\nOptions:\nREPLACE\n>",
+        "category stats": "If you would like to view your submissions within a specific category, type that category here:\nOptions:\nREPLACE\n>",
         "start date stats": "If you would like to view your submissions within a specific date range, type the start date in the following format: date-month-fullYear (ex: 06-06-2021). Otherwise, type 'All Dates'\n>",
         "end date stats": "Type the end date in the following format: date-month-fullYear (ex:06-06-2021)\n>",
         "write query to file": "Would you like to write this query to a file? Options: Yes or No\n>",
         "name query file": "What would you like to name this file?\n>",
-        "new query doc": "Would you like to write to a new document or add to REPLACE? Options: Yes (for 'New Document') or No (for 'add to REPLACE')\n>"
-
+        "new query doc": "Would you like to write to a new document or add to REPLACE? Options: Yes (for 'New Document') or No (for 'add to REPLACE')\n>",
+        "make graph": "It looks like you just retrieved some quantifiable data. Would you like to render this data as a graph? Options: Yes or No\n>"
     }
 
-category_ls = ["closeness",
-            "relationship anxiety",
-            "gratitude texts",
-            "conflict descriptions",
-            "how conflict was addressed",
-            "how to approach other",
-            "empathizing with other",
-            "how to frame conflict",
-            "intended conflict resolution"
-            "appreciation of other",
-            "appreciation of self",
-            "support from others",
-            "steps to security",
-            "consent score",
-            "self soothe score",
-            "other soothe score",
-            "total communication score"]
+category_ls = ["closeness", "relationship anxiety", "gratitude texts", "conflict descriptions", "how conflict was addressed",
+            "how to approach other", "empathizing with other", "how to frame conflict", "intended conflict resolution"
+            "appreciation of other", "appreciation of self", "support from others", "steps to security", "consent score",
+            "self soothe score", "other soothe score", "total communication score"]
+
+category_types = {"closeness": int, "relationship anxiety": int, "gratitude texts": str, "conflict descriptions": str, "how conflict was addressed": str,
+            "how to approach other": str, "empathizing with other": str, "how to frame conflict": str, "intended conflict resolution": str,
+            "appreciation of other": str, "appreciation of self": str, "support from others": str, "steps to security": str, "consent score": int,
+            "self soothe score": int, "other soothe score": int, "total communication score": int}
    

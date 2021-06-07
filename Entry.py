@@ -165,7 +165,6 @@ class InterpersonalConflict(Entry):
         self._intended = intended
 
     def add_consent(self, consent):
-
         if consent.lower() == "yes":
             self._consent = 1
             self._communication_score += 1
