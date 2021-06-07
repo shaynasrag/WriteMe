@@ -1,4 +1,4 @@
-from static import print_text, validate, get_input, add_and_commit
+from static import print_text, validate, get_input, add_and_commit, yes_or_no
 from Entry import InterpersonalConflict
 
 class EntryCLI():
@@ -17,7 +17,7 @@ class EntryCLI():
             self.begin_conflict_entry()
             self.submission.add_entry(self.entry)
             add_and_commit(self.session, [self.entry, self.submission])
-            if not validate(self.entry.yes_or_no, "another relationship"):
+            if not validate(yes_or_no, "another relationship"):
                 print_text("not another relationship")
                 discuss = False
 
@@ -25,7 +25,7 @@ class EntryCLI():
         self.communal_strength()
         validate(self.entry.add_anxiety, "anxiety")
 
-        if not validate(self.entry.yes_or_no, "conflict", self._curr_person): 
+        if not validate(yes_or_no, "conflict", self._curr_person): 
             self.add_input_to_entry(self.entry.add_gratitude, "gratitude", self._curr_person)   
         else:
             self.talk_about_conflict()  
@@ -38,7 +38,7 @@ class EntryCLI():
     def talk_about_conflict(self):
         self.add_input_to_entry(self.entry.add_conflict, "conflict description")
         space = get_input("space")
-        if validate(self.entry.yes_or_no, "addressed", self._curr_person):
+        if validate(yes_or_no, "addressed", self._curr_person):
             self.review_conflict()
         else:
             self.brainstorm_how_to_resolve()
@@ -54,7 +54,7 @@ class EntryCLI():
         conclusion = get_input("effective communication", self._curr_person)
 
     def brainstorm_how_to_resolve(self):
-        if validate(self.entry.yes_or_no, "how to begin", self._curr_person):
+        if validate(yes_or_no, "how to begin", self._curr_person):
             self.add_input_to_entry(self.entry.add_how_to_approach, "how to approach", self._curr_person)
             self.add_input_to_entry(self.entry.add_their_side, "their side", self._curr_person)
             print_text("healthy communication", self._curr_person)

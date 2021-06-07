@@ -35,5 +35,33 @@ text_dict = {
         "self compassion": "Let's remember that if you've acted unpleasantly, you're not doing it on purpose. You're just expressing yourself in a way that's familiar to you and trying to get your needs met.\nType anything to continue.\n>Self compassion may be unfamiliar because you've learned to condemn, criticize, or judge yourself when you learn something you don't like about yourself.\nLet's zoom in on how you reacted to the conflict between you and REPLACE.\nZoom in on yourself during your conflict and repeat one or more of the following phrases:\nI see how you suffer just as anyone else does.\nMay you be happy.\nMay you be free from pain.\nAnything else that the you in the scene needs to hear in order to know that this difficulty is seen and acknowledged.\n",
         "appreciate person": "When it comes to anxious attachments, sometimes conflicts can overwhelm our sense of stability in the relationship.\nWe can ground ourselves through gratitude. What is one thing you appreciate about REPLACE?\n>",
         "appreciate self": "We still need to keep in mind self-compassion. What is one thing you appreciate about yourself today?\n>",
-        "gratitude": "Finally, sometimes it's important to take the time to focus on the positive. Tell me more about the importance of your relationship with REPLACE and why you're grateful for it.\n>"
+        "gratitude": "Finally, sometimes it's important to take the time to focus on the positive. Tell me more about the importance of your relationship with REPLACE and why you're grateful for it.\n>",
+        "welcome to stats": "Welcome to your analysis environment.\nHere, you can view data based on your previous submissions and filter them based on person, category, or date range.\n",
+        "people stats": "If you would like to view your submissions on a specific person, type their name here. Otherwise, type 'Everyone':\nOptions: REPLACE\n>",
+        "category stats": "If you would like to view your submissions within a specific category, type that category here:\nOptions: REPLACE\n>",
+        "start date stats": "If you would like to view your submissions within a specific date range, type the start date in the following format: date-month-fullYear (ex: 06-06-2021). Otherwise, type 'All Dates'\n>",
+        "end date stats": "Type the end date in the following format: date-month-fullYear (ex:06-06-2021)\n>",
+        "write query to file": "Would you like to write this query to a file? Options: Yes or No\n>",
+        "name query file": "What would you like to name this file?\n>",
+        "new query doc": "Would you like to write to a new document or add to REPLACE? Options: Yes (for 'New Document') or No (for 'add to REPLACE')\n>"
+
     }
+
+category_ls = ["closeness",
+            "relationship anxiety",
+            "gratitude texts",
+            "conflict descriptions",
+            "how conflict was addressed",
+            "how to approach other",
+            "empathizing with other",
+            "how to frame conflict",
+            "intended conflict resolution"
+            "appreciation of other",
+            "appreciation of self",
+            "support from others",
+            "steps to security",
+            "consent score",
+            "self soothe score",
+            "other soothe score",
+            "total communication score"]
+   

@@ -3,6 +3,8 @@ from Exceptions import IncorrectResponse
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
 
+from datetime import datetime
+from static import get_today
 Base = declarative_base()
 
 class Entry(Base):
@@ -73,17 +75,13 @@ class Entry(Base):
     def add_intended(self, intended):
         pass
 
-    def yes_or_no(self, answer):
-        if answer.lower() == "yes" or answer.lower() == "y":
-            return True
-        elif answer.lower() == "no" or answer.lower() == "n":
-            return False
-        else:
-            raise IncorrectResponse(["Yes", "No"])
-
 class InterpersonalConflict(Entry):
     __tablename__ = "interpersonalconflict"
     _entry_id = Column(Integer, ForeignKey('entry._entry_id'), primary_key = True)
+    _entry_day = Column(Integer)
+    _entry_month = Column(Integer)
+    _entry_year = Column(Integer)
+    _entry_date = Column(String)
     _gratitude = Column(String)
     _conflict = Column(String)
     _steps_to_secure = Column(String)
@@ -124,7 +122,15 @@ class InterpersonalConflict(Entry):
         self._their_side = None
         self._how_to_frame = None
         self._intended = None
-    
+        self.set_date()
+
+    def set_date(self):
+        date = get_today()
+        self._entry_date = '-'.join([str(d) for d in date])
+        self._entry_month = date[0]
+        self._entry_day = date[1]
+        self._entry_year = date[2]
+
     def add_gratitude(self, gratitude):
         self._gratitude = gratitude
     
@@ -229,16 +235,25 @@ class InterpersonalConflict(Entry):
         else:
             raise IncorrectResponse(["High Anxiety", "Mid Anxiety", "Low Anxiety", "No Anxiety"])
 
-    def get_stats(self, obj, filter, session, names=None):
-        if names is not None:
-            results = session.query(obj).all()
-            anxiety_results = [r._anxiety for r in results]
-            return anxiety_results
-        else:
-            results_ls = []
-            for name in names:
-                results_ls.append(session.query(obj).filter(obj._person == name))
-            anxiety_results = []
-            for results in results_ls:
-                for r in results:
-                    anxiety_results.append(r._anxiety)
+    def get_attribute(self, command):
+        category_commands = {
+            "closeness": self._communal_strength,
+            "relationship anxiety": self._anxiety,
+            "gratitude texts": self._gratitude,
+            "conflict descriptions": self._conflict,
+            "how conflict was addressed": self._how_addressed,
+            "how to approach other": self._how_to_approach,
+            "empathizing with other": self._their_side,
+            "how to frame conflict": self._how_to_frame,
+            "intended conflict resolution": self._intended,
+            "appreciation of other": self._appreciate_other,
+            "appreciation of self": self._appreciate_self,
+            "support from others": self._support_from_others,
+            "steps to security": self._steps_to_secure,
+            "consent score": self._consent,
+            "self soothe score": self._self_soothe1,
+            "other soothe score": self._other_soothe1,
+            "total communication score": self._communication_score,
+            }
+        
+        return category_commands[command]

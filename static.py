@@ -1,5 +1,6 @@
 from Exceptions import IncorrectResponse
 from strings import text_dict
+from datetime import datetime
 
 def print_error(e):
     print("Please choose from the following choices: ") 
@@ -30,3 +31,17 @@ def add_and_commit(session, add_list):
     for thingToAdd in add_list:
         session.add(thingToAdd)
     session.commit() 
+
+def get_today():
+    today = datetime.today()
+    full_day = today.strftime("%m-%d-%Y")
+    day_ls = full_day.split('-')
+    return [int(d) for d in day_ls]
+
+def yes_or_no(answer):
+        if answer.lower() == "yes" or answer.lower() == "y":
+            return True
+        elif answer.lower() == "no" or answer.lower() == "n":
+            return False
+        else:
+            raise IncorrectResponse(["Yes", "No"])

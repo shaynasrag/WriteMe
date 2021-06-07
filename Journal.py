@@ -5,6 +5,7 @@ from sqlalchemy.orm.session import sessionmaker
 
 from sqlalchemy.types import TypeDecorator
 from Submission import Submission, Base
+from static import get_today
 
 class Journal(Base):
     __tablename__ = "journal"
@@ -12,6 +13,9 @@ class Journal(Base):
     _id = Column(Integer, primary_key = True)
     _people = relationship("People")
     _name = Column(String)
+
+    def __init__(self):
+        self.start_date = get_today()
  
     def add_submission(self, submission):
         self._submissions.append(submission)

@@ -14,7 +14,7 @@ class JournalCLI():
         add_and_commit(self.session, [self.journal])
         self.choices = {
             "add submission": SubmissionCLI(self.journal, self.session).run,
-            "check stats": StatsCLI(self.journal, self.session).run,
+            "view stats": StatsCLI(self.journal, self.session).run,
             "fetch transcript": TranscriptCLI(self.journal, self.session).run,
             "quit": quit,
         }
