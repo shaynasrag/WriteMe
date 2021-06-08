@@ -1,7 +1,7 @@
 import sys
 from Journal import Journal
 from Entry import Base 
-from static import print_text, get_input, add_and_commit
+from static import print_text, get_input, add_and_commit, get_today
 from ActionCLI import SubmissionCLI, TranscriptCLI, StatsCLI
 
 from sqlalchemy import create_engine
@@ -44,6 +44,7 @@ class JournalCLI():
         journal = self.session.query(Journal).first()
         if not journal:
             journal = Journal()
+            journal._start_date = get_today()
         return journal
         
     def quit(self):

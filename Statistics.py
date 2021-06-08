@@ -22,15 +22,15 @@ class Statistics():
 
     def query_session(self):
 
-        if self.person_filter and not self.start_date_filter:
+        if self.person_filter != 'everyone' and not self.start_date_filter:
             self.query = self.session.query(IC).filter(IC._person == self.person_filter)
         
-        elif self.start_date_filter and not self.person_filter:
+        elif self.start_date_filter and self.person_filter == 'everyone':
             self.query = self.session.query(IC).filter(IC._entry_day >= self.start_date_filter[0], IC._entry_day <= self.end_date_filter[0],
                                                     IC._entry_month >= self.start_date_filter[1], IC._entry_month <= self.end_date_filter[1],
                                                     IC._entry_year >= self.start_date_filter[2], IC._entry_year <= self.end_date_filter[2])
 
-        elif self.person_filter and self.start_date_filter:
+        elif self.person_filter != 'everyone' and self.start_date_filter:
             self.query = self.session.query(IC).filter(IC._person == self.person_filter, 
                                                     IC._entry_day >= self.start_date_filter[0], IC._entry_day <= self.end_date_filter[0],
                                                     IC._entry_month >= self.start_date_filter[1], IC._entry_month <= self.end_date_filter[1],
@@ -46,6 +46,7 @@ class Statistics():
             self.person_filter = person
             return True
         elif person.lower() == "everyone":
+            self.person_filter = "everyone"
             return False
         else:
             raise IncorrectResponse('\n'.join(people_ls) + ' ')
@@ -62,25 +63,26 @@ class Statistics():
             return False
         else:
             start_date_ls = [int(d) for d in start_date.split('-')]
-            month, journal_start_month = int(start_date_ls[0]), self.journal.start_date[0]
-            day, journal_start_day = int(start_date_ls[1]), self.journal.start_date[1]
-            year, journal_start_year = int(start_date_ls[2]), self.journal.start_date[2]
+            journal_sd_ls = [int(d) for d in self.journal._start_date]
+            month, journal_start_month = int(start_date_ls[0]), journal_sd_ls[0]
+            day, journal_start_day = int(start_date_ls[1]), journal_sd_ls[1]
+            year, journal_start_year = int(start_date_ls[2]), journal_sd_ls[2]
 
             if year < journal_start_year or (year >= journal_start_year and month < journal_start_month) or (year >= journal_start_year and month >= journal_start_month and day < journal_start_day):
-                raise IncorrectResponse(["date after" + '-'.join(self.journal.start_date)])
+                raise IncorrectResponse(["date after" + self.journal._start_date])
             else:
                 self.start_date_filter = start_date_ls
                 return True
     
     def add_end_date_filter(self, end_date):
-        today_ls = get_today()
         end_date_ls = [int(d) for d in end_date.split('-')]
+        today_ls = [int(d) for d in self.today.split('-')]
         month, journal_end_month = int(end_date_ls[0]), today_ls[0]
         day, journal_end_day = int(end_date_ls[1]), today_ls[1]
         year, journal_end_year = int(end_date_ls[2]), today_ls[2]
 
         if year > journal_end_year or (year <= journal_end_year and month > journal_end_month) or (year <= journal_end_year and month <= journal_end_month and day > journal_end_day):
-            raise IncorrectResponse(["date before" + '-'.join(today_ls)])
+            raise IncorrectResponse(["date before" + '-'.join(self.today)])
         
         else:
             self.end_date_filter = end_date_ls
@@ -89,35 +91,28 @@ class Statistics():
         with open(query_doc_name, "a+") as f:
             f.write(query_string + "\n")
     
-    def make_graph(self):
-        people_dict_x = {}
-        people_dict_y = {}
-        people_ls = []
+    def make_and_save_graph(self):
         plt.xlabel('Date of Entry')
         plt.ylabel(self.category_filter.capitalize())
-        plt.xlim([self.journal.start_date])
+        plt.title('Graph of ' + self.category_filter.capitalize() + ' for ' + self.person_filter.capitalize())
+        
+        people_dict_x, people_dict_y, people_ls = self.make_axes_dicts()        
+        for person in people_ls:
+            plt.plot_date(people_dict_x[person], people_dict_y[person], label = person)
+        plt.legend()
+        plt.show()
+        plt.savefig(self.category_filter + ' for ' + self.person_filter + get_today() + '.png')
+
+    def make_axes_dicts(self):
+        people_dict_x, people_dict_y = {}, {}
+        people_ls = []
         for entry in self.query:
             attribute = entry.get_attribute(self.category_filter)
-            formatted_date = dates.datestr2num(datetime.strptime(entry._entry_date, '%m-%d-%Y').strftime('%m/%d/%Y'))
             if entry._person not in people_dict_y:
                 people_ls.append(entry._person)
                 people_dict_y[entry._person] = [attribute]
-                people_dict_x[entry._person] = [formatted_date]
+                people_dict_x[entry._person] = [entry._entry_date]
             else:
                 people_dict_y[entry._person].append(attribute)
-                people_dict_x[entry._person].append(formatted_date)
-        
-        for person in people_ls:
-            plt.plot_date(people_dict_x[person], people_dict_y[person], label = person)
-        # plt.plot_date()
-        plt.show()
-            
-
-
-
-
-
-    
-
-        
-    
+                people_dict_x[entry._person].append(entry._entry_date)
+        return people_dict_x, people_dict_y, people_ls

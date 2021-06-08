@@ -88,6 +88,8 @@ class StatsCLI(ActionCLI):
             self.set_filters()
             self.show_and_record_results()
             self.offer_and_save_graph()
+            if not validate(yes_or_no, "another stats"):
+                return
 
     def set_filters(self):
         validate(self.stats_object.add_person_filter, "people stats", '\n'.join(self.journal.get_people()) + ' ')
@@ -123,11 +125,8 @@ class StatsCLI(ActionCLI):
                 self.query_doc_name = get_input("name query file") 
     
     def offer_and_save_graph(self):
-        if self.query_type == int:
-            if validate(yes_or_no, "make graph"):
-                self.stats_object.make_graph()
-                if validate(yes_or_no, "save graph"):
-                    self.stats_object.save_graph()
+        if self.query_type == int and validate(yes_or_no, "make graph"):
+            self.stats_object.make_and_save_graph()
         
 
     

@@ -125,8 +125,8 @@ class InterpersonalConflict(Entry):
         self.set_date()
 
     def set_date(self):
-        date = get_today()
-        self._entry_date = '-'.join([str(d) for d in date])
+        self._entry_date = get_today()
+        date = [int(d) for d in self._entry_date.split('-')]
         self._entry_month = date[0]
         self._entry_day = date[1]
         self._entry_year = date[2]

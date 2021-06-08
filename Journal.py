@@ -13,9 +13,7 @@ class Journal(Base):
     _id = Column(Integer, primary_key = True)
     _people = relationship("People")
     _name = Column(String)
-
-    def __init__(self):
-        self.start_date = get_today()
+    _start_date = Column(String)
  
     def add_submission(self, submission):
         self._submissions.append(submission)

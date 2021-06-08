@@ -44,7 +44,9 @@ text_dict = {
         "write query to file": "Would you like to write this query to a file? Options: Yes or No\n>",
         "name query file": "What would you like to name this file?\n>",
         "new query doc": "Would you like to write to a new document or add to REPLACE? Options: Yes (for 'New Document') or No (for 'add to REPLACE')\n>",
-        "make graph": "It looks like you just retrieved some quantifiable data. Would you like to render this data as a graph? Options: Yes or No\n>"
+        "make graph": "It looks like you just retrieved some quantifiable data. Would you like to render this data as a graph? Options: Yes or No\n>",
+        "another stats": "Would you like to view another set of data? Options: Yes or No\n>"
+    
     }
 
 category_ls = ["closeness", "relationship anxiety", "gratitude texts", "conflict descriptions", "how conflict was addressed",

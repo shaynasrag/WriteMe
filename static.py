@@ -34,9 +34,8 @@ def add_and_commit(session, add_list):
 
 def get_today():
     today = datetime.today()
-    full_day = today.strftime("%m-%d-%Y")
-    day_ls = full_day.split('-')
-    return [int(d) for d in day_ls]
+    return today.strftime("%m-%d-%Y")
+
 
 def yes_or_no(answer):
         if answer.lower() == "yes" or answer.lower() == "y":
