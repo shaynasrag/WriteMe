@@ -3,7 +3,7 @@ from Entry import InterpersonalConflict as IC
 from strings import category_ls, category_types
 from static import get_today, get_input
 import matplotlib.pyplot as plt
-import matplotlib.dates as dates
+from matplotlib.dates import date2num
 from datetime import datetime
 
 
@@ -63,7 +63,7 @@ class Statistics():
             return False
         else:
             start_date_ls = [int(d) for d in start_date.split('-')]
-            journal_sd_ls = [int(d) for d in self.journal._start_date]
+            journal_sd_ls = [int(d) for d in start_date_ls]
             month, journal_start_month = int(start_date_ls[0]), journal_sd_ls[0]
             day, journal_start_day = int(start_date_ls[1]), journal_sd_ls[1]
             year, journal_start_year = int(start_date_ls[2]), journal_sd_ls[2]
@@ -95,13 +95,20 @@ class Statistics():
         plt.xlabel('Date of Entry')
         plt.ylabel(self.category_filter.capitalize())
         plt.title('Graph of ' + self.category_filter.capitalize() + ' for ' + self.person_filter.capitalize())
-        
-        people_dict_x, people_dict_y, people_ls = self.make_axes_dicts()        
+        plt.ylim([0, 3.5])
+        people_dict_x, people_dict_y, people_ls = self.make_axes_dicts()     
+        ax = plt.subplot(111)
+        num = 0.0 - len(people_ls) / 2.0
+        w = 1.0 / len(people_ls)
         for person in people_ls:
-            plt.plot_date(people_dict_x[person], people_dict_y[person], label = person)
+            x = date2num(people_dict_x[person])
+            num += 0.2
+            ax.bar(x + num, people_dict_y[person], width= w, label = person, align = 'center')
+
+        ax.xaxis_date()
         plt.legend()
-        plt.show()
         plt.savefig(self.category_filter + ' for ' + self.person_filter + get_today() + '.png')
+        plt.show()
 
     def make_axes_dicts(self):
         people_dict_x, people_dict_y = {}, {}
@@ -111,8 +118,8 @@ class Statistics():
             if entry._person not in people_dict_y:
                 people_ls.append(entry._person)
                 people_dict_y[entry._person] = [attribute]
-                people_dict_x[entry._person] = [entry._entry_date]
+                people_dict_x[entry._person] = [datetime(entry._entry_year, entry._entry_month, entry._entry_day)]
             else:
                 people_dict_y[entry._person].append(attribute)
-                people_dict_x[entry._person].append(entry._entry_date)
+                people_dict_x[entry._person].append(datetime(entry._entry_year, entry._entry_month, entry._entry_day))
         return people_dict_x, people_dict_y, people_ls

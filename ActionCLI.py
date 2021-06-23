@@ -46,7 +46,7 @@ class SubmissionCLI(ActionCLI):
                 add_and_commit(self.session, [new_submission])
                 self.submission = new_submission
         else:
-            print_text("Not a valid action")
+            print_text("not valid")
 
 class TranscriptCLI(ActionCLI):
     def __init__(self, *args, **kwargs):
