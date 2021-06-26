@@ -1,11 +1,8 @@
 from Exceptions import IncorrectResponse
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, MetaData, create_engine
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.orm.session import sessionmaker
-
-from sqlalchemy.types import TypeDecorator
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from Submission import Submission, Base
-from static import get_today
+from static import add_and_commit
 
 class Journal(Base):
     __tablename__ = "journal"
@@ -15,8 +12,11 @@ class Journal(Base):
     _name = Column(String)
     _start_date = Column(String)
  
-    def add_submission(self, submission):
-        self._submissions.append(submission)
+    def add_submission(self, session):
+        new_submission = Submission()
+        self._submissions.append(new_submission)
+        add_and_commit(session, [new_submission])
+        return new_submission
     
     def get_submissions(self):
         return self._submissions

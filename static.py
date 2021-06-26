@@ -17,7 +17,14 @@ def get_input(key, toReplace=None):
     string = text_dict[key]
     if toReplace:
         string = string.replace("REPLACE", toReplace)
-    return input(string)
+    return input('\n> ' + string)
+
+def get_text(key, toReplace=None):
+    string = text_dict[key]
+    if toReplace:
+        string = string.replace("REPLACE", toReplace)
+    return string
+
 
 def validate(validator, input_string, input_placeholder=None):
     while True:
@@ -35,7 +42,6 @@ def add_and_commit(session, add_list):
 def get_today():
     today = datetime.today()
     return today.strftime("%m-%d-%Y")
-
 
 def yes_or_no(answer):
         if answer.lower() == "yes" or answer.lower() == "y":
