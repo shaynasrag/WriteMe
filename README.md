@@ -47,9 +47,9 @@ All data is stored locally in a sqlalchemy database.
 
 ### How to Run
 
-Command Line Interface: ``python JournalCLI.py``
+Command Line Interface: ``python3 main.py -CLI``
 
-Graphical User Interace (Tkinter GUI -- coming soon): ``python JournalGUI.py``
+Graphical User Interace: ``python3 main.py -GUI``
 
 ## Youtube Walkthrough
 
