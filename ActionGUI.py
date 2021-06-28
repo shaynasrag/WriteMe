@@ -1,5 +1,4 @@
 from static import print_text, add_and_commit, validate, yes_or_no, get_input
-from EntryGUI import EntryGUI
 from Submission import Submission
 from Statistics import Statistics
 from strings import category_ls
@@ -71,27 +70,3 @@ class StatsGUI(ActionGUI):
     def offer_and_save_graph(self):
         if self.query_type == int and validate(yes_or_no, "make graph"):
             self.stats_object.make_and_save_graph()
-
-
-class TranscriptGUI(ActionGUI):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    
-    def run(self):
-        self.fetch_transcript()
-
-    def fetch_transcript(self):
-        submissions = self.journal.get_submissions()
-        while True:
-            print("Please select which submission you would like to save as a file.")
-            count = 1
-            for s in submissions:
-                print(count, s._date)
-                count += 1
-            print("return to main menu")
-            sub_num = input(">")
-            if sub_num == "return to main menu":
-                return
-            submission = self.journal.get_submission(int(sub_num) - 1)
-            submission.write_submission_to_file(sub_num)
-            print("Submission has been written to file.")
