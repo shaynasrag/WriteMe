@@ -1,18 +1,15 @@
-from static import add_and_commit, get_text
-from Entry import InterpersonalConflict
+from Static.static import add_and_commit, get_text
+from Objects.Entry import InterpersonalConflict
 
 from tkinter import *
 
-class EntryGUI():
+class EntryGUI:
     def __init__(self, submission, journal, session, myJournal, show_main_menu):
         self.submission = submission
         self._journal = journal
         self.session = session
         self._myJournal = myJournal
         self.show_main_menu = show_main_menu
-
-        self.entry = None
-        self._curr_person = None
 
         self.show_people_frame = Frame(self._myJournal)
         self.new_person_frame = Frame(self._myJournal)
@@ -26,7 +23,6 @@ class EntryGUI():
 
     def run(self):
         self.bool_adder_frame.destroy()
-        self.entry = InterpersonalConflict(self._curr_person)
         self.show_people(self._journal.get_people())  
     
     def radio_button(self, text, radiobuttons, func, frames_to_destroy=[]):
@@ -55,6 +51,7 @@ class EntryGUI():
         func(toAdd)
         self.bool_adder_frame.destroy()
         add_and_commit(self.session, [self.entry, self.submission])
+        "added and committed"
         next_func()
 
     def adder(self, text, func, next_func, frames_to_destroy=[]):
@@ -75,11 +72,11 @@ class EntryGUI():
         add_and_commit(self.session, [self.entry, self.submission])
         self.next_func()
     
-    def label_and_button(self, text, toReplace, func, frames_to_destroy=[]):
+    def label_and_button(self, text, toReplace, func, frames_to_destroy=[], buttonText="Next"):
         [frame_to_destroy.destroy() for frame_to_destroy in frames_to_destroy]
         self.label_and_button_frame = Frame(self._myJournal)
         Label(self.label_and_button_frame, text = get_text(text, toReplace)).grid(row=0, column=0)
-        Button(self.label_and_button_frame, text= "Next", command = func).grid(row=1, column=0)
+        Button(self.label_and_button_frame, text= buttonText, command = func).grid(row=1, column=0)
         self.label_and_button_frame.grid(row=0,column=0)
 
     def show_people(self, name_ls): 
@@ -121,13 +118,14 @@ class EntryGUI():
     
     def conclusion(self): 
         self.submission.add_entry(self.entry)
-        add_and_commit(self.session, [self.entry, self.submission])
+        add_and_commit(self.session, [self.entry, self.submission, self._journal])
         self.bool_adder("another relationship", self.run, self.exit)
     
     def anxiety(self): 
         self.radio_button("anxiety", [["High Anxiety", "high anxiety"], ["Mid Anxiety", "mid anxiety"], ["Low Anxiety", "low anxiety"], ["No Anxiety", "no anxiety"]], self.add_anxiety, [self.label_and_button_frame])
 
     def begin_conflict_entry(self):
+        self.entry = InterpersonalConflict(self._curr_person)
         self.radio_button("closeness", [["Close", "close"], ["Not So Close", "not so close"], ["Distanced", "distanced"]], self.add_closeness)
 
     def has_addressed(self): 
@@ -146,7 +144,7 @@ class EntryGUI():
         self.bool_adder("how to begin", self.add_how_to_approach, self.add_steps_to_secure)
 
     def add_consent(self): 
-        self.bool_getter(self.entry.add_consent, self.check_self_soothe)
+        self.bool_getter(func=self.entry.add_consent, next_func=self.check_self_soothe)
 
     def add_self_soothe(self):
         self.bool_getter(self.entry.add_self_soothe1, self.check_other_soothe)
@@ -203,7 +201,7 @@ class EntryGUI():
         self.label_and_button("self compassion", self._curr_person, self.add_appreciate_other)
 
     def exit(self): 
-        self.label_and_button("not another relationship", self._curr_person, self.return_to_main_menu, [self.bool_adder_frame, self.label_and_button_frame])
+        self.label_and_button("not another relationship", self._curr_person, self.return_to_main_menu, [self.bool_adder_frame, self.label_and_button_frame], "Return to Main Menu")
 
     def return_to_main_menu(self):
         self.label_and_button_frame.destroy()
@@ -214,6 +212,7 @@ class EntryGUI():
         self.bool_adder("conflict", self.talk_about_conflict, self.gratitude, self.radio_button_frame)
     
     def add_closeness(self):
-        close = self.entry.add_communal_strength(self.Var.get())
+        closeness = self.Var.get()
+        close = self.entry.add_communal_strength(closeness)
         text = "glad to hear" if close else "sorry to hear"
         self.label_and_button(text, self._curr_person, self.anxiety, [self.radio_button_frame])

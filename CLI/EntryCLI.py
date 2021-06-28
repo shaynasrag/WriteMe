@@ -1,5 +1,5 @@
-from static import print_text, validate, get_input, add_and_commit, yes_or_no
-from Entry import InterpersonalConflict
+from Static.static import print_text, validate, get_input, add_and_commit, yes_or_no
+from Objects.Entry import InterpersonalConflict
 
 class EntryCLI():
     def __init__(self, submission, journal, session):

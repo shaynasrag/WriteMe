@@ -1,5 +1,5 @@
-from Exceptions import IncorrectResponse
-from strings import text_dict
+from Objects.Exceptions import IncorrectResponse
+from Static.strings import text_dict
 from datetime import datetime
 
 def print_error(e):

@@ -23,7 +23,7 @@ text_dict = {
         "self soothe1": "Next, did you take steps to physically/emotionally soothe yourself?\nOptions: Yes or No",
         "other soothe1": "How about REPLACE. Did you take steps to physically/emotionally soothe each other?\nOptions: Yes or No",
         "communication score": "Remember, when you are close to someone, what you do or say around that person makes an impact, whether positive or negative.\nYour healthy communication score this time with is REPLACE/3. Type anything to continue",
-        "effective communication": "Effective, health communication is possible for you, and developing these skills can help you develop and build trust and safety with REPLACE. Type anything to continue",
+        "effective communication": "Effective, healthy communication is possible for you, and developing these skills can help you develop and build trust and safety with REPLACE. Type anything to continue",
         "how to begin": "Would you like to brainstorm ways to go about this conflict with REPLACE?\nOptions: Yes or No",
         "how to approach": "An important aspect of healthy communication is asking consent from REPLACE and allowing both of you the space to address this conflict in the way that is safe for both of you.\n What is one way you could ask consent from REPLACE before entering in this conversation?",
         "their side": "We've already talked about what your experience of the conflict has been. Let's take a moment to think about REPLACE's side of the conflict.\nCan you try to explain what you think is going on with REPLACE in relation to this conflict?\nPerhaps REPLACE doesn't know that there is a conflict, or perhaps this has been bothering them as well. Take a moment to describe what their perspective may be.",

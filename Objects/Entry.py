@@ -1,10 +1,9 @@
-from Exceptions import IncorrectResponse
-
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
 
 from datetime import datetime
-from static import get_today
+from Static.static import get_today
+from Objects.Exceptions import IncorrectResponse
 Base = declarative_base()
 
 class Entry(Base):

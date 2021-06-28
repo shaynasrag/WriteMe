@@ -1,14 +1,12 @@
-from Exceptions import IncorrectResponse
-from Entry import InterpersonalConflict as IC
-from strings import category_ls, category_types
-from static import get_today, get_input
+from Objects.Exceptions import IncorrectResponse
+from Objects.Entry import Entry as IC
+from Static.strings import category_ls, category_types
+from Static.static import get_today
 import matplotlib.pyplot as plt
 from matplotlib.dates import date2num
 from datetime import datetime
 
-
-from Exceptions import IncorrectResponse
-class Statistics():
+class Statistics:
     def __init__(self, session, journal):
         self.journal = journal
         self.session = session

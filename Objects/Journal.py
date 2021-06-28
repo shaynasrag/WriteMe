@@ -1,8 +1,10 @@
-from Exceptions import IncorrectResponse
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from Submission import Submission, Base
-from static import add_and_commit
+
+from Objects.Submission import Submission
+from Objects.Exceptions import IncorrectResponse
+from Static.static import add_and_commit
+from Objects.Entry import Base
 
 class Journal(Base):
     __tablename__ = "journal"

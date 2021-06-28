@@ -1,10 +1,8 @@
 from datetime import datetime
-from Entry import Entry, Base
+
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, MetaData, create_engine
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.orm.session import sessionmaker
-# from MyTime import MyTime
-from sqlalchemy.types import TypeDecorator
+from sqlalchemy.orm import relationship
+from Objects.Entry import Base
 
 class Submission(Base):
     __tablename__ = "submission"
@@ -25,7 +23,6 @@ class Submission(Base):
     def write_submission_to_file(self, sub_num):
         filename = "Submission-" + sub_num
         entries = self._entries
-        print(entries)
         with open(filename, "w") as f:
             f.write("Submission #" + sub_num + ": " + str(self._date) + "\n")
             count = 1
