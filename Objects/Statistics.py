@@ -1,8 +1,9 @@
 from Objects.Exceptions import IncorrectResponse
-from Objects.Entry import Entry as IC
+from Objects.Entry import InterpersonalConflict as IC
 from Static.strings import category_ls, category_types
 from Static.static import get_today
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 from matplotlib.dates import date2num
 from datetime import datetime
 
@@ -72,6 +73,8 @@ class Statistics:
                 self.start_date_filter = start_date_ls
                 return True
     
+
+    
     def add_end_date_filter(self, end_date):
         end_date_ls = [int(d) for d in end_date.split('-')]
         today_ls = [int(d) for d in self.today.split('-')]
@@ -84,12 +87,16 @@ class Statistics:
         
         else:
             self.end_date_filter = end_date_ls
+    
+    def get_date_range(self):
+        dates = self.session.query(IC._entry_date).all()
+        return [str(d[0]) for d in dates]
 
     def write_query_to_file(self, query_doc_name, query_string):        
         with open(query_doc_name, "a+") as f:
             f.write(query_string + "\n")
     
-    def make_and_save_graph(self):
+    def make_and_save_graph(self, CLI=True):
         plt.xlabel('Date of Entry')
         plt.ylabel(self.category_filter.capitalize())
         plt.title('Graph of ' + self.category_filter.capitalize() + ' for ' + self.person_filter.capitalize())
@@ -105,9 +112,12 @@ class Statistics:
 
         ax.xaxis_date()
         plt.legend()
+        rcParams['figure.figsize'] = 40,12
         plt.savefig(self.category_filter + ' for ' + self.person_filter + get_today() + '.png')
-        plt.show()
-
+        if CLI:
+            plt.show()
+        else:
+            return self.category_filter + ' for ' + self.person_filter + get_today() + '.png'
     def make_axes_dicts(self):
         people_dict_x, people_dict_y = {}, {}
         people_ls = []

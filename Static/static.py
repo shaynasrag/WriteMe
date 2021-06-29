@@ -17,7 +17,7 @@ def get_input(key, toReplace=None):
     string = text_dict[key]
     if toReplace:
         string = string.replace("REPLACE", toReplace)
-    return input('\n> ' + string)
+    return input(string + '\n>')
 
 def get_text(key, toReplace=None):
     string = text_dict[key]

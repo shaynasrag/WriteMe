@@ -5,7 +5,7 @@ from CLI.ActionCLI import SubmissionCLI, TranscriptCLI, StatsCLI
 from Objects.Entry import Base
 
 from tkinter import *
-from GUI.ActionGUI import StatsGUI
+from GUI.StatsGUI import StatsGUI
 from GUI.EntryGUI import EntryGUI
 from GUI.TranscriptGUI import TranscriptGUI
 
@@ -60,7 +60,7 @@ class JournalGUI:
         self.options_frame = Frame(self._myJournal)
         self.greeting_label = Label(self.options_frame, text = get_text("greeting_old", self.journal._name)).grid(row=0, column=1)
         Button(self.options_frame, text = "add submission", command = self.add_submission).grid(row=1, column=0)
-        Button(self.options_frame, text = "view stats", command = StatsGUI(self.journal, self.session, self._myJournal, self.options_frame).run).grid(row=1, column=1)
+        Button(self.options_frame, text = "view stats", command = self.start_stats).grid(row=1, column=1)
         Button(self.options_frame, text = "fetch transcript", command = self.start_transcript).grid(row=1, column=2)
         self.options_frame.grid(row=1,column=0)
     
@@ -85,6 +85,11 @@ class JournalGUI:
         self.options_frame.destroy()
         self.submission_frame.destroy()
         TranscriptGUI(self.journal, self.session, self._myJournal, self.show_main_menu).run()
+    
+    def start_stats(self):
+        self.options_frame.destroy()
+        self.submission_frame.destroy()
+        StatsGUI(self.journal, self.session, self._myJournal, self.show_main_menu).run()
 
 class JournalCLI():
     def __init__(self):
