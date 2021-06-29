@@ -1,17 +1,16 @@
 import sys
-from Objects.Journal import Journal
-from Static.static import print_text, get_input, add_and_commit, get_today, get_text
-from CLI.ActionCLI import SubmissionCLI, TranscriptCLI, StatsCLI
-from Objects.Entry import Base
-
 from tkinter import *
+
+from Objects.Journal import Journal
+from Objects.Entry import Base
+from CLI.ActionCLI import SubmissionCLI, TranscriptCLI, StatsCLI
+from Static.static import print_text, get_input, add_and_commit, get_today, get_text
 from GUI.StatsGUI import StatsGUI
 from GUI.EntryGUI import EntryGUI
 from GUI.TranscriptGUI import TranscriptGUI
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm.session import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 
 class JournalGUI:
     def __init__(self, myJournal):

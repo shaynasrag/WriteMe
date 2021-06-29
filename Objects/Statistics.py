@@ -73,8 +73,6 @@ class Statistics:
                 self.start_date_filter = start_date_ls
                 return True
     
-
-    
     def add_end_date_filter(self, end_date):
         end_date_ls = [int(d) for d in end_date.split('-')]
         today_ls = [int(d) for d in self.today.split('-')]
@@ -116,7 +114,9 @@ class Statistics:
         plt.savefig(self.category_filter + ' for ' + self.person_filter + get_today() + '.png')
         if CLI:
             plt.show()
+            plt.clf()
         else:
+            plt.clf()
             return self.category_filter + ' for ' + self.person_filter + get_today() + '.png'
     def make_axes_dicts(self):
         people_dict_x, people_dict_y = {}, {}

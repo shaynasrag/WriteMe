@@ -56,4 +56,3 @@ category_types = {"closeness": int, "relationship anxiety": int, "gratitude text
             "how to approach other": str, "empathizing with other": str, "how to frame conflict": str, "intended conflict resolution": str,
             "appreciation of other": str, "appreciation of self": str, "support from others": str, "steps to security": str, "consent score": int,
             "self soothe score": int, "other soothe score": int, "total communication score": int}
-   

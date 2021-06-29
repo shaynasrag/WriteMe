@@ -1,3 +1,4 @@
+from sqlalchemy.sql.expression import column
 from Static.static import get_text
 from Objects.Statistics import Statistics
 from Static.strings import category_ls
@@ -52,12 +53,16 @@ class StatsGUI:
         self.end_dateVar.set("All Dates")
 
         Label(self.filters_frame, text="Please choose any filters you'd like on the stats you'd like to view.").grid(row=0,column=0)
+        Label(self.filters_frame, text="Person:").grid(row=1,sticky=W)
         OptionMenu(self.filters_frame, self.personVar, *people).grid(row=1, column=0)
+        Label(self.filters_frame, text="Category:").grid(row=2,sticky=W)
         OptionMenu(self.filters_frame, self.categoryVar, *category_ls).grid(row=2,column=0)
+        Label(self.filters_frame, text="Start Date:").grid(row=3,sticky=W)
         OptionMenu(self.filters_frame, self.start_dateVar, *dates).grid(row=3, column=0)
+        Label(self.filters_frame, text="End Date:").grid(row=4,sticky=W)
         OptionMenu(self.filters_frame, self.end_dateVar, *dates).grid(row=4,column=0)
         Button(self.filters_frame, text = "Next", command=self.add_filters_to_obj).grid(row=5, column=0)
-        Button(self.filters_frame, text = "Back", command=self.add_filters_to_obj).grid(row=6, column=0)
+        Button(self.filters_frame, text = "Back", command=self.run).grid(row=6, column=0)
         self.filters_frame.grid(row=0,column=0)
 
     def add_filters_to_obj(self):
@@ -87,14 +92,14 @@ class StatsGUI:
     def record_results(self):
         self.show_results_frame.destroy()
         self.record_results_frame = Frame(self._myJournal)
-        print(self.query_doc_name)
         if self.query_doc_name:
-            Label(self.record_results_frame, text=get_text("new query doc", self.query_doc_name)).grid(row=0,column=0)
-            Button(self.record_results_frame, text="Yes", command=self.new_filename).grid(row=1, column=0)
-            Button(self.record_results_frame, text="No", command=self.write_query).grid(row=2,column=0)
+            Label(self.record_results_frame, text=get_text("new query doc", "'" + self.query_doc_name + "'")).grid(row=0,column=0)
+            Button(self.record_results_frame, text="Write to New File", command=self.new_filename).grid(row=1, column=0)
+            Button(self.record_results_frame, text="Write to Current Doc", command=self.write_query).grid(row=2,column=0)
+            self.record_results_frame.grid(row=0,column=0)
         else:
             self.new_filename()
-            
+        
     def new_filename(self):
         self.record_results_frame.destroy()
         self.new_file_frame = Frame(self._myJournal)
@@ -105,13 +110,14 @@ class StatsGUI:
         self.new_file_frame.grid(row=0,column=0)
         
     def set_filename(self):
-        self.query_doc_name = self.filename.get()
-        print(self.query_doc_name)
+        self.query_doc_name = self.filename.get() + '.txt'
         self.record_results_frame.destroy()
         self.new_file_frame.destroy()
         self.write_query()
 
     def write_query(self):
+        self.show_results_frame.destroy()
+        self.record_results_frame.destroy()
         self.stats_object.write_query_to_file(self.query_doc_name, self.query_string)
         if self.query_type == int:
             self.offer_and_save_graph()
@@ -129,7 +135,6 @@ class StatsGUI:
         self.graph_frame.destroy()
         self.show_graph_frame = Frame(self._myJournal)
         graph_image = self.stats_object.make_and_save_graph(CLI=False)
-        print(graph_image)
         Label(self.show_graph_frame, text="Your graph has been saved under the name '{0}'".format(graph_image)).grid(row=0,column=0)
         self.graph_canvas = Canvas(self.show_graph_frame,width=700,height=500)
         self.graph_canvas.grid(row=1,column=0)

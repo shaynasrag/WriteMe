@@ -33,7 +33,6 @@ class TranscriptGUI():
         self.curr_submission = self.journal.get_submission(self.sub_num)
         Label(self.show_sub_frame, text = "Submission-" + str(self.sub_num)).grid(row=0, column=0)
         entries = self.curr_submission._entries
-        print(entries)
         count = 1
         row = 1
         for entry in entries:
