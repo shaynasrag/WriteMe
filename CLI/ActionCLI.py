@@ -1,6 +1,6 @@
 from Static.static import print_text, validate, yes_or_no, get_input
 from CLI.EntryCLI import EntryCLI
-from Objects.Statistics import Statistics
+from Objects.Statistics import Statistics, Graph
 from Static.strings import category_ls
 
 class ActionCLI():
@@ -91,6 +91,8 @@ class StatsCLI(ActionCLI):
     def set_filters(self):
         validate(self.stats_object.add_person_filter, "people stats", '\n'.join(self.journal.get_people()) + ' ')
         self.query_type = validate(self.stats_object.add_category_filter, "category stats", '\n'.join(category_ls))
+        if self.query_type == int:
+            self.stats_object = self.stats_object.stats_to_graph(True)
         if validate(self.stats_object.add_start_date_filter, "start date stats"):
             validate(self.stats_object.add_end_date_filter, "end date stats")
     
@@ -122,7 +124,7 @@ class StatsCLI(ActionCLI):
                 self.query_doc_name = get_input("name query file") 
     
     def offer_and_save_graph(self):
-        if self.query_type == int and validate(yes_or_no, "make graph"):
+        if isinstance(self.stats_object, Graph) and validate(yes_or_no, "make graph"):
             self.stats_object.make_and_save_graph()
         
 

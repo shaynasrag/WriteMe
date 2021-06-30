@@ -1,6 +1,6 @@
 from sqlalchemy.sql.expression import column
 from Static.static import get_text
-from Objects.Statistics import Statistics
+from Objects.Statistics import Statistics, Graph
 from Static.strings import category_ls
 from tkinter import *
 from PIL import ImageTk, Image
@@ -69,6 +69,8 @@ class StatsGUI:
         self.filters_frame.destroy()
         self.stats_object.add_person_filter(self.personVar.get())
         self.query_type = self.stats_object.add_category_filter(self.categoryVar.get())
+        if self.query_type == int:
+            self.stats_object = self.stats_object.stats_to_graph(False)
         if self.stats_object.add_start_date_filter(self.start_dateVar.get()):
             self.stats_object.add_end_date_filter(self.end_dateVar.get())
         self.query = self.stats_object.query_session()
@@ -86,8 +88,9 @@ class StatsGUI:
             self.query_string += (entry_string + '\n')
             row += 1
         Button(self.show_results_frame, text="Write Query to File", command=self.record_results).grid(row=row, column=0)
-        if self.query_type == int:
-            Button(self.show_results_frame, text="Skip to Graph", command=self.offer_and_save_graph).grid(row= row + 1, column=0)
+        if isinstance(self.stats_object, Graph):
+            Button(self.show_results_frame, text="Skip to Graph", command=self.show_graph).grid(row= row + 1, column=0)
+            Button(self.show_results_frame, text="Back", command=self.set_filters).grid(row= row + 2, column=0)  
         else:
             Button(self.show_results_frame, text="Back", command=self.set_filters).grid(row= row + 1, column=0)      
         self.show_results_frame.grid(row=0, column=0)
@@ -122,13 +125,12 @@ class StatsGUI:
         self.show_results_frame.destroy()
         self.record_results_frame.destroy()
         self.stats_object.write_query_to_file(self.query_doc_name, self.query_string)
-        if self.query_type == int:
+        if isinstance(self.stats_object, Graph):
             self.offer_and_save_graph()
         else:
             self.another_stats()
     
     def offer_and_save_graph(self):
-        self.show_results_frame.destroy()
         self.graph_frame = Frame(self._myJournal)
         Label(self.graph_frame, text=get_text("make graph")).grid(row=0,column=0)
         Button(self.graph_frame, text="Yes", command=self.show_graph).grid(row=1,column=0)
@@ -136,9 +138,10 @@ class StatsGUI:
         self.graph_frame.grid(row=0,column=0)
     
     def show_graph(self):
+        self.show_results_frame.destroy()
         self.graph_frame.destroy()
         self.show_graph_frame = Frame(self._myJournal)
-        graph_image = self.stats_object.make_and_save_graph(CLI=False)
+        graph_image = self.stats_object.make_and_save_graph()
         Label(self.show_graph_frame, text="Your graph has been saved under the name '{0}'".format(graph_image)).grid(row=0,column=0)
         self.graph_canvas = Canvas(self.show_graph_frame,width=700,height=500)
         self.graph_canvas.grid(row=1,column=0)
