@@ -1,7 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
-
-from datetime import datetime
 from Static.static import get_today
 from Objects.Exceptions import IncorrectResponse
 Base = declarative_base()
@@ -151,23 +149,11 @@ class InterpersonalConflict(Base):
 
     def get_attribute(self, command):
         category_commands = {
-            "closeness": self._communal_strength,
-            "relationship anxiety": self._anxiety,
-            "gratitude texts": self._gratitude,
-            "conflict descriptions": self._conflict,
-            "how conflict was addressed": self._how_addressed,
-            "how to approach other": self._how_to_approach,
-            "empathizing with other": self._their_side,
-            "how to frame conflict": self._how_to_frame,
-            "intended conflict resolution": self._intended,
-            "appreciation of other": self._appreciate_other,
-            "appreciation of self": self._appreciate_self,
-            "support from others": self._support_from_others,
-            "steps to security": self._steps_to_secure,
-            "consent score": self._consent,
-            "self soothe score": self._self_soothe1,
-            "other soothe score": self._other_soothe1,
-            "total communication score": self._communication_score,
-            }
-        
+            "closeness": self._communal_strength, "relationship anxiety": self._anxiety, "gratitude texts": self._gratitude,
+            "conflict descriptions": self._conflict, "how conflict was addressed": self._how_addressed, "how to approach other": self._how_to_approach,
+            "empathizing with other": self._their_side, "how to frame conflict": self._how_to_frame, "intended conflict resolution": self._intended,
+            "appreciation of other": self._appreciate_other, "appreciation of self": self._appreciate_self, "support from others": self._support_from_others,
+            "steps to security": self._steps_to_secure, "consent score": self._consent, "self soothe score": self._self_soothe1,
+            "other soothe score": self._other_soothe1, "total communication score": self._communication_score,
+            } 
         return category_commands[command]
