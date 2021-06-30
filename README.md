@@ -55,15 +55,6 @@ This goal of each entry is to create an interactive environement in which the us
 
 ![image](https://user-images.githubusercontent.com/54994003/120749074-c13da000-c4b8-11eb-90ff-67f2cc59c8bb.png)
 
-## Youtube Walkthroughs
-
-[How To: Add Submission](https://youtu.be/NKih6uXt9dg)
-
-[How To: Fetch Transcript](https://youtu.be/Xu8CKvM2lnk)
-
-[How To: View Stats](https://youtu.be/DQ6pJmo9YR8)
-
-
 ## Usage
 
 ### How to Run
@@ -75,3 +66,11 @@ Graphical User Interace: ``python3 main.py -GUI``
 ### Data Storage
 
 All data is stored locally in a sqlalchemy database.
+
+## Youtube Walkthroughs
+
+[How To: Add Submission](https://youtu.be/NKih6uXt9dg)
+
+[How To: Fetch Transcript](https://youtu.be/Xu8CKvM2lnk)
+
+[How To: View Stats](https://youtu.be/DQ6pJmo9YR8)
