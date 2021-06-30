@@ -34,7 +34,6 @@ class StatsGUI:
     def run(self):
         self.filters_frame.destroy()
         self.graph_frame.destroy()
-        self.another_stats_frame.destroy()
         self.stats_start_frame = Frame(self._myJournal)
         Label(self.stats_start_frame, text = get_text("welcome to stats")).grid(row=0, column=0)
         Button(self.stats_start_frame, text = "Next", command=self.set_filters).grid(row=1, column=0)
@@ -44,6 +43,7 @@ class StatsGUI:
     def set_filters(self):
         self.stats_start_frame.destroy()
         self.show_results_frame.destroy()
+        self.another_stats_frame.destroy()
         self.filters_frame = Frame(self._myJournal)
         people = self.journal.get_people()
         dates = self.stats_object.get_date_range()
@@ -84,7 +84,7 @@ class StatsGUI:
         for entry in self.query:
             attribute = entry.get_attribute(self.stats_object.category_filter)
             entry_string = "Date: " + entry._entry_date + ", Person: " + entry._person + ", " + self.stats_object.category_filter.capitalize() + ": " + str(attribute)
-            Label(self.show_results_frame, text=entry_string).grid(row=row, column=0)
+            Label(self.show_results_frame, text=entry_string).grid(row=row, sticky=W)
             self.query_string += (entry_string + '\n')
             row += 1
         Button(self.show_results_frame, text="Write Query to File", command=self.record_results).grid(row=row, column=0)
@@ -154,7 +154,7 @@ class StatsGUI:
         self.show_graph_frame.destroy()
         self.another_stats_frame = Frame(self._myJournal)
         Label(self.another_stats_frame, text=get_text("another stats")).grid(row=0,column=0)
-        Button(self.another_stats_frame, text="Yes", command=self.run).grid(row=1,column=0)
+        Button(self.another_stats_frame, text="Yes", command=self.set_filters).grid(row=1,column=0)
         Button(self.another_stats_frame, text="Back to Main Menu", command=self.exit).grid(row=2,column=0)
         self.another_stats_frame.grid(row=0,column=0)
 

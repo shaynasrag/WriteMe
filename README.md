@@ -20,6 +20,22 @@ This program takes the form of Python's tkinter graphical user interface (GUI). 
 
 ## How it works
 
+### Functions
+
+There are 3 main functions of this program: to add a submission, to view specific data from previous entries, and to retrieve transcripts of previous submissions.
+
+## Add Submission
+
+The "add submission" option creates a new submission and allows the user to add multiple entries to that submission.
+
+## View Stats
+
+The "view stats" option provides the user with an environment in which they can query the existing database and compare previous entries to each other. When quantifiable data is retrieved, the user can render the data as a graph which is saved locally.
+
+## Fetch Transcript
+
+The "fetch transcript" option allows users to retrieve previous submissions and save them to a file.
+
 ### Structure of the Journal
 
 The following image shows how the Journal is structured. When the program is first accessed, an instance of the journal is created. Every use of the journal creates an instance of a submission and within every submission, a user can submit multiple entries. The user can submit multiple entries on multiple people, and all of those entries are stored in one submission at the time of access.
@@ -33,6 +49,14 @@ This goal of each entry is to create an interactive environement in which the us
 
 ![image](https://user-images.githubusercontent.com/54994003/120749074-c13da000-c4b8-11eb-90ff-67f2cc59c8bb.png)
 
+## Youtube Walkthroughs
+
+[How To: Add Submission](https://youtu.be/NKih6uXt9dg)
+
+[How To: Fetch Transcript](https://youtu.be/Xu8CKvM2lnk)
+
+[How To: View Stats](https://youtu.be/DQ6pJmo9YR8)
+
 
 ## Usage
 
@@ -45,7 +69,3 @@ Graphical User Interace: ``python3 main.py -GUI``
 ### Data Storage
 
 All data is stored locally in a sqlalchemy database.
-
-## Youtube Walkthrough
-
-Coming soon!
