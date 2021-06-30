@@ -24,19 +24,19 @@ This program takes the form of Python's tkinter graphical user interface (GUI). 
 
 There are 3 main functions of this program: to add a submission, to view specific data from previous entries, and to retrieve transcripts of previous submissions.
 
-### Add Submission
+#### Add Submission
 
 The "add submission" option creates a new submission and allows the user to add multiple entries to that submission.
 
 [Watch how to do it here](https://youtu.be/NKih6uXt9dg)
 
-### View Stats
+#### View Stats
 
 The "view stats" option provides the user with an environment in which they can query the existing database and compare previous entries to each other. When quantifiable data is retrieved, the user can render the data as a graph which is saved locally.
 
 [Watch how to do it here](https://youtu.be/DQ6pJmo9YR8)
 
-### Fetch Transcript
+#### Fetch Transcript
 
 The "fetch transcript" option allows users to retrieve previous submissions and save them to a file.
 
