@@ -86,7 +86,10 @@ class StatsGUI:
             self.query_string += (entry_string + '\n')
             row += 1
         Button(self.show_results_frame, text="Write Query to File", command=self.record_results).grid(row=row, column=0)
-        Button(self.show_results_frame, text="Back", command=self.set_filters).grid(row=row + 1, column=0)         
+        if self.query_type == int:
+            Button(self.show_results_frame, text="Skip to Graph", command=self.offer_and_save_graph).grid(row= row + 1, column=0)
+        else:
+            Button(self.show_results_frame, text="Back", command=self.set_filters).grid(row= row + 1, column=0)      
         self.show_results_frame.grid(row=0, column=0)
 
     def record_results(self):
@@ -125,6 +128,7 @@ class StatsGUI:
             self.another_stats()
     
     def offer_and_save_graph(self):
+        self.show_results_frame.destroy()
         self.graph_frame = Frame(self._myJournal)
         Label(self.graph_frame, text=get_text("make graph")).grid(row=0,column=0)
         Button(self.graph_frame, text="Yes", command=self.show_graph).grid(row=1,column=0)

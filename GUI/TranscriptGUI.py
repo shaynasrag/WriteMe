@@ -22,8 +22,8 @@ class TranscriptGUI():
         for s in submissions:
             Radiobutton(self.show_submissions_frame, text = s._date, variable = self.subVar, value=row - 1).grid(row=row, column=0)
             row += 1
-        Button(self.show_submissions_frame, text = "Back", command = self.exit).grid(row = row + 1, column = 0)
-        Button(self.show_submissions_frame, text = "Next", command = self.show_submission).grid(row = row + 2, column = 0)
+        Button(self.show_submissions_frame, text = "Next", command = self.show_submission).grid(row = row + 1, column = 0)
+        Button(self.show_submissions_frame, text = "Back", command = self.exit).grid(row = row + 2, column = 0)
         self.show_submissions_frame.grid(row=0,column=0)
     
     def show_submission(self):

@@ -3,9 +3,11 @@ from Objects.Entry import InterpersonalConflict as IC
 from Static.strings import category_ls, category_types
 from Static.static import get_today
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from matplotlib import rcParams
 from matplotlib.dates import date2num
 from datetime import datetime
+from random import random
 
 class Statistics:
     def __init__(self, session, journal):
@@ -61,34 +63,29 @@ class Statistics:
         if start_date.lower() == "all dates":
             return False
         else:
-            start_date_ls = [int(d) for d in start_date.split('-')]
-            journal_sd_ls = [int(d) for d in start_date_ls]
-            month, journal_start_month = int(start_date_ls[0]), journal_sd_ls[0]
-            day, journal_start_day = int(start_date_ls[1]), journal_sd_ls[1]
-            year, journal_start_year = int(start_date_ls[2]), journal_sd_ls[2]
-
-            if year < journal_start_year or (year >= journal_start_year and month < journal_start_month) or (year >= journal_start_year and month >= journal_start_month and day < journal_start_day):
+            input_ls, start_datetime, journal_startDatetime = self.make_datetimes(start_date, self.journal._start_date) 
+            if start_datetime < journal_startDatetime:
                 raise IncorrectResponse(["date after" + self.journal._start_date])
             else:
-                self.start_date_filter = start_date_ls
+                self.start_date_filter = input_ls
                 return True
     
     def add_end_date_filter(self, end_date):
-        end_date_ls = [int(d) for d in end_date.split('-')]
-        today_ls = [int(d) for d in self.today.split('-')]
-        month, journal_end_month = int(end_date_ls[0]), today_ls[0]
-        day, journal_end_day = int(end_date_ls[1]), today_ls[1]
-        year, journal_end_year = int(end_date_ls[2]), today_ls[2]
-
-        if year > journal_end_year or (year <= journal_end_year and month > journal_end_month) or (year <= journal_end_year and month <= journal_end_month and day > journal_end_day):
+        dates = self.get_date_range()  
+        input_ls, end_datetime, journal_endDatetime = self.make_datetimes(end_date, dates[-1])   
+        if end_datetime > journal_endDatetime:
             raise IncorrectResponse(["date before" + '-'.join(self.today)])
-        
         else:
-            self.end_date_filter = end_date_ls
+            self.end_date_filter = input_ls
+    
+    def make_datetimes(self, input_date, journal_date):
+        input_ls = [int(d) for d in input_date.split('-')]
+        journal_ls = [int(d) for d in journal_date.split('-')]
+        return input_ls, datetime(input_ls[2], input_ls[0], input_ls[1]), datetime(journal_ls[2], journal_ls[0], journal_ls[1])
     
     def get_date_range(self):
         dates = self.session.query(IC._entry_date).all()
-        return [str(d[0]) for d in dates]
+        return [d[0] for d in dates]
 
     def write_query_to_file(self, query_doc_name, query_string):        
         with open(query_doc_name, "a+") as f:
@@ -101,13 +98,36 @@ class Statistics:
         plt.ylim([0, 3.5])
         people_dict_x, people_dict_y, people_ls = self.make_axes_dicts()     
         ax = plt.subplot(111)
-        num = 0.0 - len(people_ls) / 2.0
-        w = 1.0 / len(people_ls)
+        xticks = []
+        num = 0.0
+        bars = []
+        colors = {}
+        color_ls = []
         for person in people_ls:
-            x = date2num(people_dict_x[person])
-            num += 0.2
-            ax.bar(x + num, people_dict_y[person], width= w, label = person, align = 'center')
+            x_ls = people_dict_x[person]
+            y_ls = people_dict_y[person]
+            if person not in colors:
+                r, b, g = random(), random(), random()
+                c = (r, g, b)
+                while c in color_ls:
+                    r, b, g = random(), random(), random()
+                    c = (r, g, b)
+            else:
+                c = colors[person]
+            for i in range(len(x_ls)):
+                x = date2num(x_ls[i])
+                if i % 2 == 1:
+                    bars.append(ax.bar(x - num, y_ls[i], label = person if i == 0 else "", color=c, width=0.1))
+                else:
+                    bars.append(ax.bar(x + num, y_ls[i], label = person, color=c, width=0.1))
 
+                num += 0.10
+                if x_ls[i] not in xticks:
+                    xticks.append(x_ls[i])
+                plt.xticks(ticks=xticks)
+
+        plt.xticks(ticks=xticks)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
         ax.xaxis_date()
         plt.legend()
         rcParams['figure.figsize'] = 40,12
