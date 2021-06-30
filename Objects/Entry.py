@@ -6,77 +6,12 @@ from Static.static import get_today
 from Objects.Exceptions import IncorrectResponse
 Base = declarative_base()
 
-class Entry(Base):
+class InterpersonalConflict(Base):
     __tablename__ = "entry"
     _submission_id = Column(Integer, ForeignKey('submission._submission_number'))
     _entry_id = Column(Integer, primary_key= True)
     _person = Column(String)
     _entry_type = Column(String(50))
-    __mapper_args__ = {
-        'polymorphic_identity': 'entry',
-        'polymorphic_on': _entry_type
-    }
-
-    def __init__(self, person):
-        self._person = person
-    
-    def add_gratitude(self, gratitude):
-        pass
-    
-    def add_conflict(self, conflict):
-        pass
-    
-    def add_steps_to_secure(self, steps):
-        pass
-    
-    def add_addressed(self, addressed):
-        pass
-
-    def add_appreciate_other(self, appreciate_other):
-        pass
-
-    def add_appreciate_self(self, appreciate_self):
-        pass
-    
-    def add_support_from_others(self, support):
-        pass
-    
-    def add_consent(self, consent):
-        pass
-        
-    def add_self_soothe1(self, self_soothe1):
-        pass
-    
-    def add_other_soothe1(self, other_soothe1):
-        pass
-    
-    def add_self_soothe2(self, self_soothe2):
-        pass
-
-    def add_other_soothe2(self, other_soothe2):
-        pass
-
-    def add_communal_strength(self, communal_strength):
-        pass
-    
-    def add_anxiety(self, anxiety):
-        pass
-
-    def add_how_to_approach(self, how_to_approach):
-        pass
-
-    def add_their_side(self, their_side):
-        pass
-
-    def add_how_to_frame(self, how_to_frame):
-        pass
-
-    def add_intended(self, intended):
-        pass
-
-class InterpersonalConflict(Entry):
-    __tablename__ = "interpersonalconflict"
-    _entry_id = Column(Integer, ForeignKey('entry._entry_id'), primary_key = True)
     _entry_day = Column(Integer)
     _entry_month = Column(Integer)
     _entry_year = Column(Integer)
@@ -98,29 +33,10 @@ class InterpersonalConflict(Entry):
     _their_side = Column(String)
     _how_to_frame = Column(String)
     _intended = Column(String)
-    __mapper_args__ = {
-        'polymorphic_identity': 'interpersonalconflict'
-    }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._gratitude = None
-        self._conflict = None
-        self._steps_to_secure = None
-        self._how_addressed = None
-        self._appreciate_other = None
-        self._appreciate_self = None
-        self._support_from_others = None
-        self._consent = None
-        self._self_soothe1 = None
-        self._other_soothe1 = None
+
+    def __init__(self, person):
         self._communication_score = 0
-        self._communal_strength = None
-        self._anxiety = None
-        self._how_to_approach = None
-        self._their_side = None
-        self._how_to_frame = None
-        self._intended = None
+        self._person = person
         self.set_date()
 
     def set_date(self):

@@ -6,7 +6,7 @@ from Objects.Entry import Base
 
 class Submission(Base):
     __tablename__ = "submission"
-    _entries = relationship("Entry")
+    _entries = relationship("InterpersonalConflict")
     _date = Column(String(length = 20))
     _journal_id = Column(Integer, ForeignKey("journal._id"))
     _submission_number = Column(Integer, primary_key = True)
